@@ -43,6 +43,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.DirectoryChooser;
+import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -83,7 +84,7 @@ public class DirectoryController implements Initializable {
     @FXML
     private Label directoryLabel, trackInfoLabel;    
     @FXML
-    private Slider volumeSlider;
+    private Slider volumeSlider, timeSlider;
     @FXML
     private ProgressBar songProgressBar;
     @FXML
@@ -159,12 +160,12 @@ public class DirectoryController implements Initializable {
             if (mediaPlayer!=null) {
                 mediaPlayer.stop();
                 mediaPlayer.dispose();
+                timer.cancel();
                 mediaPlayer = null;
             }        
             mediaPlayer = new MediaPlayer(media);        
             mediaPlayer.setVolume(volumeSlider.getValue()*0.01);        
-            mediaPlayer.play();        
-            mediaPlayer.setVolume(volumeSlider.getValue()*0.01);        
+            mediaPlayer.play();    
             beginTimer();
         }      
     }
@@ -203,6 +204,15 @@ public class DirectoryController implements Initializable {
         }        
     }
 
+    public void seekTime() {
+        songProgressBar.setProgress(timeSlider.getValue()*0.01);
+        if (mediaPlayer!=null) {
+            mediaPlayer.seek(Duration.millis(timeSlider.getValue()*mediaPlayer.getTotalDuration().toMillis()*0.01));
+        }  
+        
+    }
+    
+    
     public void stopMedia() {
         songProgressBar.setProgress(0);
         if (mediaPlayer!= null) {
