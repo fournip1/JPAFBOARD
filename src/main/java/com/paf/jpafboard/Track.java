@@ -139,7 +139,7 @@ public class Track {
 
         @Override
         public String toString() {
-            return artist + " - " + title;
+            return title;
         }
 
 }

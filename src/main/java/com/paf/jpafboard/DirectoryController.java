@@ -33,6 +33,7 @@ import java.util.stream.Stream;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
@@ -88,7 +89,9 @@ public class DirectoryController implements Initializable {
     @FXML
     private ProgressBar songProgressBar;
     @FXML
-    private TextField searchField;    
+    private TextField searchField;  
+    @FXML
+    private ChoiceBox searchModeChoice;
     
     /****************************************************************************
      * Methods to initialize.                                                   *
@@ -107,10 +110,18 @@ public class DirectoryController implements Initializable {
         }
         }
         });
+
+        // intializing seach mode values. I tried to do that in the fxml file without success.
+        String[] searchModes = {"Or","And"};
+        searchModeChoice.getItems().setAll(searchModes);
+        searchModeChoice.setValue("Or");
         
+        // setting two listeners
         volumeSlider.valueProperty().addListener(
                 (o) -> {setVolume();});
-
+        searchModeChoice.valueProperty().addListener(
+                (o) -> {searchKeyWords();});
+        
            try
            {
                initializeConnexion();
@@ -136,9 +147,6 @@ public class DirectoryController implements Initializable {
         // Initializing the tracks ArrayList
         aTracks = library.getArrayTracks();
         tracksList.getItems().setAll(aTracks);
-        System.out.println("\n\nIt seems to have worked\n\n");
-        volumeSlider.setValue(50);
-        // Collection librariesCollection = .
         }
         finally {
         // destroy the data source which should close underlying connections
@@ -215,7 +223,8 @@ public class DirectoryController implements Initializable {
     
     public void stopMedia() {
         songProgressBar.setProgress(0);
-        if (mediaPlayer!= null) {
+        if (mediaPlayer!= null) {            
+            mediaPlayer.seek(Duration.ZERO);
             mediaPlayer.stop();
         }
     }
@@ -228,14 +237,13 @@ public class DirectoryController implements Initializable {
             timer = null;
             timer = new Timer();
         }
-
         task = new TimerTask() {
                 @Override
                 public void run() {
                     double current = mediaPlayer.getCurrentTime().toSeconds();                
                     songProgressBar.setProgress(mediaPlayer.getCurrentTime().toSeconds()/ mediaPlayer.getTotalDuration().toSeconds());                
                     if (current>=mediaPlayer.getTotalDuration().toSeconds()) {
-                        stopMedia();
+                        stopMedia();                        
                     }
                 }
             };
@@ -269,18 +277,29 @@ public class DirectoryController implements Initializable {
 
     public void searchKeyWords() {        
         Set<Genre> hGenres = new HashSet<>();
-        hTracks = new HashSet<>();
+        ArrayList<Track> fTracks;   
         String[] keyWords = searchField.getText().split(" ");
-        for (String str:keyWords) {
-            aTracks.stream()
-                    .filter(t -> t.getKeyWordString().toLowerCase().contains(str.toLowerCase()))
-                    .forEach(hTracks::add);
+        if (searchModeChoice.getValue().equals("Or")) {
+            hTracks = new HashSet<>();
+            for (String str:keyWords) {
+                aTracks.stream()
+                        .filter(t -> t.getKeyWordString().toLowerCase().contains(str.toLowerCase()))
+                        .forEach(hTracks::add);
+            }
+            fTracks = hTracks.stream()
+                    .sorted(comparing(Track::getTitle))
+                    .collect(toCollection(ArrayList::new));            
+        } else {
+            fTracks = aTracks;
+            for (String str:keyWords) {
+                fTracks = fTracks.stream()
+                        .filter(t -> t.getKeyWordString().toLowerCase().contains(str.toLowerCase()))
+                        .collect(toCollection(ArrayList::new));
+            }
         }
         
-        tracksList.getItems().setAll(hTracks.stream()
-                    .sorted(comparing(Track::getTitle))
-                    .collect(toCollection(ArrayList::new)));
-        hTracks.stream()
+        tracksList.getItems().setAll(fTracks);
+        fTracks.stream()
                 .map(t -> t.getArrayGenres())
                 .forEach(hGenres::addAll);        
         
