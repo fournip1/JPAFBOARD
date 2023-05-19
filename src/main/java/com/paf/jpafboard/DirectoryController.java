@@ -14,6 +14,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import static java.util.Comparator.comparing;
 import java.util.HashSet;
@@ -25,17 +26,22 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toCollection;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
@@ -57,6 +63,7 @@ public class DirectoryController implements Initializable {
     private final static String DATABASE_URL = App.getURL();
     private ConnectionSource connectionSource;
     private Dao<MusicLibrary, String> musiclibraryDao;
+    private Dao<Genre, String> genreDao;
     private File selectedDirectory;
 
     // To manage the music player
@@ -73,7 +80,10 @@ public class DirectoryController implements Initializable {
     @FXML
     private AnchorPane directoryPane;
     @FXML
-    private ListView genresList, tracksList;
+//    private ListView genresList, tracksList;
+    private ListView tracksList;
+    @FXML
+    private GridPane genresGrid;
     @FXML
     private Label directoryLabel, trackInfoLabel;
     @FXML
@@ -85,6 +95,11 @@ public class DirectoryController implements Initializable {
     @FXML
     private ChoiceBox searchModeChoice;
 
+    // Setting the grid objects
+    private final int NB_COLUMNS = 5;
+    private final int BUTTON_MIN_WIDTH = 140;
+    private ArrayList<Button> genresButtons = new ArrayList<>();
+    
     /**
      * **************************************************************************
      * Methods to initialize. *
@@ -109,7 +124,7 @@ public class DirectoryController implements Initializable {
         String[] searchModes = {"Or", "And"};
         searchModeChoice.getItems().setAll(searchModes);
         searchModeChoice.setValue("Or");
-
+        
         // setting two listeners
         volumeSlider.valueProperty().addListener(
                 (o) -> {
@@ -135,10 +150,12 @@ public class DirectoryController implements Initializable {
             connectionSource = new JdbcConnectionSource(DATABASE_URL);
             // setup our database and DAOs
             musiclibraryDao = DaoManager.createDao(connectionSource, MusicLibrary.class);
+            genreDao = DaoManager.createDao(connectionSource, Genre.class);
             // library = musiclibraryDao.queryForId(DIRECTORY);
             library = musiclibraryDao.queryForAll().get(0);
             directoryLabel.setText(library.toString());
-            genresList.getItems().setAll(library.getArrayGenres());
+            // genresList.getItems().setAll(library.getArrayGenres());
+            populateGenres(library.getArrayGenres());
 
             // Initializing the tracks ArrayList
             aTracks = library.getArrayTracks();
@@ -162,7 +179,7 @@ public class DirectoryController implements Initializable {
         if (selectedTrack != null) {
             try {
                 media = new Media(((Track) selectedTrack).getPath());
-                trackInfoLabel.setText("loaded: " + ((Track) selectedTrack).getTitle() + " " + ((Track) selectedTrack).getGenresString());
+                trackInfoLabel.setText("loaded: " + ((Track) selectedTrack).getArtist() + " - " + ((Track) selectedTrack).getTitle() + " " + ((Track) selectedTrack).getGenresString());
                 if (mediaPlayer != null) {
                     mediaPlayer.stop();
                     mediaPlayer.dispose();
@@ -255,8 +272,11 @@ public class DirectoryController implements Initializable {
      * Methods to handle the track list. *
      **************************************************************************
      */
-    public void selectTracksByGenre() {
-        Object selectedGenre = genresList.getSelectionModel().getSelectedItem();
+    public void selectTracksByGenre(String genreLabel) throws SQLException {
+        // Object selectedGenre = genresList.getSelectionModel().getSelectedItem();        
+        // À modifier
+        // Object selectedGenre = genresTable.getSelectionModel().getSelectedCells().get(0);
+        Genre selectedGenre = genreDao.queryForId(genreLabel);
         if (searchField.getText().equals("")) {
             if (selectedGenre != null) {
                 tracksList.getItems().setAll(((Genre) selectedGenre).getArrayTracks());
@@ -305,9 +325,34 @@ public class DirectoryController implements Initializable {
 
         // Debugging purpose
         // System.out.println("Nombre de genres:" + hGenres.size());              
-        genresList.getItems().setAll(hGenres.stream()
+        // genresList.getItems().setAll(hGenres.stream()
+        //        .sorted(comparing(Genre::getLabel))
+        //        .collect(toCollection(ArrayList::new)));
+        populateGenres(hGenres.stream()
                 .sorted(comparing(Genre::getLabel))
                 .collect(toCollection(ArrayList::new)));
+    }
+    
+    public void populateGenres(ArrayList<Genre> cGenres) {
+        genresGrid.getChildren().removeAll(genresButtons);
+        genresButtons = new ArrayList<>();
+        
+            for (int i=0; i < cGenres.size(); i++) {
+                Button nButton = new Button(cGenres.get(i).getLabel());
+                nButton.setMinWidth(BUTTON_MIN_WIDTH);
+                nButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override public void handle(ActionEvent e) {
+                        try {
+                            selectTracksByGenre(nButton.getText());
+                        }
+                        catch (SQLException s) {
+                            s.printStackTrace();
+                        }
+                }
+                });
+                genresButtons.add(nButton);
+                genresGrid.add(genresButtons.get(i),i%NB_COLUMNS,i/NB_COLUMNS,1,1);
+            }    
     }
 
     /**
@@ -370,7 +415,8 @@ public class DirectoryController implements Initializable {
                     System.out.println("Fichier non valide!");
                 }
             }
-            genresList.getItems().setAll(library.getArrayGenres());
+            // genresList.getItems().setAll(library.getArrayGenres());
+            populateGenres(library.getArrayGenres());
             // This initializes the tracks ArrayList
             aTracks = library.getArrayTracks();
             tracksList.getItems().setAll(aTracks);
