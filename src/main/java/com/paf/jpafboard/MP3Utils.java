@@ -25,7 +25,8 @@ import java.util.Map;
  */
 public class MP3Utils {
     private String mp3Path;
-    final Mp3File mp3File;
+    private Mp3File mp3File;
+    private boolean valid = true; 
 
     public void setMp3Path(String mp3Path) {
         this.mp3Path = mp3Path;
@@ -33,7 +34,12 @@ public class MP3Utils {
 
     public MP3Utils(String mp3Path) throws UnsupportedTagException, InvalidDataException, IOException, NotSupportedException {
         this.mp3Path = mp3Path;
-        this.mp3File = new Mp3File(mp3Path);
+        try {
+            this.mp3File = new Mp3File(mp3Path);
+        } catch (Exception e) {
+            System.out.println("Exception trouvée");
+            this.valid = false;
+        }
     }
     
     public String getMp3Path() {
@@ -82,4 +88,12 @@ public class MP3Utils {
         }                
         return dataMap;
     }
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
+    }    
 }
