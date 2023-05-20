@@ -14,8 +14,6 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -64,6 +62,7 @@ public class App extends Application {
                 }
 		Parent root = FXMLLoader.load(getClass().getResource("directory.fxml"));
 		Scene scene = new Scene(root);
+                stage.setTitle("Ze PAF Board");
 		stage.setScene(scene);
 		stage.show();
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {

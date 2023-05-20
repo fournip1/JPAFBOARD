@@ -139,7 +139,6 @@ public class Track {
 
         @Override
         public String toString() {
-            return title;
+            return  title + " " + getGenresString();
         }
-
 }

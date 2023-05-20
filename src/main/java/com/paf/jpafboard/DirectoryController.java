@@ -74,6 +74,7 @@ public class DirectoryController implements Initializable {
 
     // Only for searching purpose
     private ArrayList<Track> aTracks;
+    private ArrayList<Track> fTracks;
     private Set<Track> hTracks;
 
     // Retrieving the objects from the view
@@ -99,11 +100,11 @@ public class DirectoryController implements Initializable {
     private final int NB_COLUMNS = 5;
     private final int BUTTON_MIN_WIDTH = 140;
     private ArrayList<Button> genresButtons = new ArrayList<>();
-    
+
     /**
      * **************************************************************************
      * Methods to initialize. *
-     **************************************************************************
+     * *************************************************************************
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -124,7 +125,7 @@ public class DirectoryController implements Initializable {
         String[] searchModes = {"Or", "And"};
         searchModeChoice.getItems().setAll(searchModes);
         searchModeChoice.setValue("Or");
-        
+
         // setting two listeners
         volumeSlider.valueProperty().addListener(
                 (o) -> {
@@ -172,14 +173,14 @@ public class DirectoryController implements Initializable {
     /**
      * **************************************************************************
      * Methods to handle the music. *
-     **************************************************************************
+     * *************************************************************************
      */
     public void playMedia() {
         Object selectedTrack = tracksList.getSelectionModel().getSelectedItem();
         if (selectedTrack != null) {
             try {
                 media = new Media(((Track) selectedTrack).getPath());
-                trackInfoLabel.setText("loaded: " + ((Track) selectedTrack).getArtist() + " - " + ((Track) selectedTrack).getTitle() + " " + ((Track) selectedTrack).getGenresString());
+                trackInfoLabel.setText("loaded: " + ((Track) selectedTrack).toString());
                 if (mediaPlayer != null) {
                     mediaPlayer.stop();
                     mediaPlayer.dispose();
@@ -190,7 +191,7 @@ public class DirectoryController implements Initializable {
                 mediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
                 mediaPlayer.play();
                 beginTimer();
-            } catch (MediaException e) {                
+            } catch (MediaException e) {
                 e.printStackTrace();
             }
         }
@@ -263,41 +264,34 @@ public class DirectoryController implements Initializable {
                 }
             }
         };
-
         timer.scheduleAtFixedRate(task, 0, 1000);
     }
 
     /**
      * **************************************************************************
      * Methods to handle the track list. *
-     **************************************************************************
+     * *************************************************************************
      */
     public void selectTracksByGenre(String genreLabel) throws SQLException {
-        // Object selectedGenre = genresList.getSelectionModel().getSelectedItem();        
-        // À modifier
-        // Object selectedGenre = genresTable.getSelectionModel().getSelectedCells().get(0);
         Genre selectedGenre = genreDao.queryForId(genreLabel);
         if (searchField.getText().equals("")) {
             if (selectedGenre != null) {
-                tracksList.getItems().setAll(((Genre) selectedGenre).getArrayTracks());
+                tracksList.getItems().setAll(selectedGenre.getArrayTracks());
             } else {
                 tracksList.getItems().setAll(library.getArrayTracks());
             }
         } else {
             if (selectedGenre != null) {
-                tracksList.getItems().setAll(hTracks.stream()
+                tracksList.getItems().setAll(fTracks.stream()
                         .filter(t -> ((Track) t).getArrayGenres().contains((Genre) selectedGenre))
                         .map(t -> (Track) t)
                         .collect(toCollection(ArrayList::new)));
-                // .filter((Track t) -> t.getArrayGenres().contains((Genre selectedGenre)))
-
             }
         }
     }
 
     public void searchKeyWords() {
         Set<Genre> hGenres = new HashSet<>();
-        ArrayList<Track> fTracks;
         String[] keyWords = searchField.getText().split(" ");
         if (searchModeChoice.getValue().equals("Or")) {
             hTracks = new HashSet<>();
@@ -332,33 +326,33 @@ public class DirectoryController implements Initializable {
                 .sorted(comparing(Genre::getLabel))
                 .collect(toCollection(ArrayList::new)));
     }
-    
+
     public void populateGenres(ArrayList<Genre> cGenres) {
         genresGrid.getChildren().removeAll(genresButtons);
         genresButtons = new ArrayList<>();
-        
-            for (int i=0; i < cGenres.size(); i++) {
-                Button nButton = new Button(cGenres.get(i).getLabel());
-                nButton.setMinWidth(BUTTON_MIN_WIDTH);
-                nButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override public void handle(ActionEvent e) {
-                        try {
-                            selectTracksByGenre(nButton.getText());
-                        }
-                        catch (SQLException s) {
-                            s.printStackTrace();
-                        }
+
+        for (int i = 0; i < cGenres.size(); i++) {
+            Button nButton = new Button(cGenres.get(i).getLabel());
+            nButton.setMinWidth(BUTTON_MIN_WIDTH);
+            nButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    try {
+                        selectTracksByGenre(nButton.getText());
+                    } catch (SQLException s) {
+                        s.printStackTrace();
+                    }
                 }
-                });
-                genresButtons.add(nButton);
-                genresGrid.add(genresButtons.get(i),i%NB_COLUMNS,i/NB_COLUMNS,1,1);
-            }    
+            });
+            genresButtons.add(nButton);
+            genresGrid.add(genresButtons.get(i), i % NB_COLUMNS, i / NB_COLUMNS, 1, 1);
+        }
     }
 
     /**
      * **************************************************************************
      * Methods to manage the library. *
-     **************************************************************************
+     * *************************************************************************
      */
     public void chooseDirectory() throws Exception {
         DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -382,8 +376,8 @@ public class DirectoryController implements Initializable {
         // Let's try with foreach instead:
         List<Path> pathList = new ArrayList<>();
         Dao<Track, String> trackDao;
-        String[] listGenres;        
-        try {            
+        String[] listGenres;
+        try {
             connectionSource = new JdbcConnectionSource(DATABASE_URL);
             trackDao = DaoManager.createDao(connectionSource, Track.class);
             TableUtils.clearTable(connectionSource, TrackGenre.class);
@@ -391,9 +385,9 @@ public class DirectoryController implements Initializable {
             TableUtils.clearTable(connectionSource, Track.class);
             pathList = Files.walk(Paths.get(library.getDirectory())).map(Path::normalize)
                     .filter(Files::isRegularFile)
-                    .filter(path -> path.getFileName().toString().endsWith(".mp3"))                   
+                    .filter(path -> path.getFileName().toString().endsWith(".mp3"))
                     .collect(Collectors.toList());
-            
+
             for (Path path : pathList) {
                 String songPath = path.toFile().toURI().toString();
                 System.out.println("Fichier examine:" + path.toString());
@@ -420,8 +414,7 @@ public class DirectoryController implements Initializable {
             // This initializes the tracks ArrayList
             aTracks = library.getArrayTracks();
             tracksList.getItems().setAll(aTracks);
-        }      
-        finally {
+        } finally {
             // destroy the data source which should close underlying connections
             if (connectionSource != null) {
                 connectionSource.close();
