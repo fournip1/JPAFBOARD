@@ -12,55 +12,61 @@ import java.util.ArrayList;
 import java.util.Objects;
 import static java.util.stream.Collectors.toCollection;
 
-
 /**
  *
  * @author lemerle
  */
-
 @DatabaseTable(tableName = "genres")
 public class Genre {
+
     public static final String LABEL_FIELD_NAME = "label";
-    public final static String LIBRARY_ID_FIELD_NAME = "directory"; 
+    public final static String LIBRARY_ID_FIELD_NAME = "directory";
 
-	@DatabaseField(columnName = LABEL_FIELD_NAME, id = true, canBeNull = false)
-	private String label;
-        
-        @DatabaseField(foreign = true,  foreignAutoRefresh = false, columnName = LIBRARY_ID_FIELD_NAME)
-	MusicLibrary library;
-        
-	@ForeignCollectionField
-	private ForeignCollection<TrackGenre> genretracks;
-        
-        Genre() {
-		// all persisted classes must define a no-arg constructor with at least package visibility
-	}
-        
-        
-        public Genre(String label, MusicLibrary library) {
-            this.label = label;
-            this.library = library;
-        }
+    @DatabaseField(columnName = LABEL_FIELD_NAME, id = true, canBeNull = false)
+    private String label;
 
-        public String getLabel() {
-		return label;
-	}
+    @DatabaseField(foreign = true, foreignAutoRefresh = false, columnName = LIBRARY_ID_FIELD_NAME)
+    MusicLibrary library;
 
-	public void setLabel(String label) {
-		this.label = label;
-	}
-        
-	public ForeignCollection<TrackGenre> getTracks() {
-		return genretracks;
-	}
+    @ForeignCollectionField
+    private ForeignCollection<TrackGenre> genretracks;
 
-        public ArrayList<Track> getArrayTracks() {
-            return genretracks.stream()
-                                .map(t->t.getTrack())
-                                .collect(toCollection(ArrayList::new));
-        }        
+    Genre() {
+        // all persisted classes must define a no-arg constructor with at least package visibility
+    }
 
+    public Genre(String label, MusicLibrary library) {
+        this.label = label;
+        this.library = library;
+    }
 
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public ForeignCollection<TrackGenre> getTracks() {
+        return genretracks;
+    }
+
+    public ArrayList<Track> getArrayTracks() {
+        ArrayList<Track> aTracks = genretracks.stream()
+                .map(t -> t.getTrack())
+                .collect(toCollection(ArrayList::new));
+        aTracks.forEach((t) -> {
+            t.setGenresString();
+        });
+        return aTracks;
+    }
+
+    public MusicLibrary getLibrary() {
+        return library;
+    }
+
+    
     @Override
     public int hashCode() {
         int hash = 7;
@@ -82,7 +88,6 @@ public class Genre {
         final Genre other = (Genre) obj;
         return Objects.equals(this.label, other.label);
     }
-
 
     @Override
     public String toString() {

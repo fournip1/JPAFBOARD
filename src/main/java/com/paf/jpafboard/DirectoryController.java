@@ -13,10 +13,10 @@ import java.io.File;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import static java.util.Comparator.comparing;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -29,15 +29,21 @@ import static java.util.stream.Collectors.toCollection;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -46,6 +52,9 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Duration;
 
 /**
@@ -61,9 +70,11 @@ public class DirectoryController implements Initializable {
     // for DB connection purpose
     // and modifying the music library
     private final static String DATABASE_URL = App.getURL();
+    private final static String EMPTYNESS = "(empty)";
     private ConnectionSource connectionSource;
     private Dao<MusicLibrary, String> musiclibraryDao;
     private Dao<Genre, String> genreDao;
+    private Dao<Track, String> trackDao;
     private File selectedDirectory;
 
     // To manage the music player
@@ -75,7 +86,7 @@ public class DirectoryController implements Initializable {
     // Only for searching purpose
     private ArrayList<Track> aTracks;
     private ArrayList<Track> fTracks;
-    private Set<Track> hTracks;
+    private Set<Track> hTracks = new HashSet<>();
 
     // Retrieving the objects from the view
     @FXML
@@ -101,6 +112,14 @@ public class DirectoryController implements Initializable {
     private final int BUTTON_MIN_WIDTH = 140;
     private ArrayList<Button> genresButtons = new ArrayList<>();
 
+    private final ContextMenu trackContextMenu = new ContextMenu();
+    private final ContextMenu genreContextMenu = new ContextMenu();
+
+    private final MenuItem menuEditTrack = new MenuItem("Edit");
+    private final MenuItem menuEditGenre = new MenuItem("Edit");
+    private final MenuItem menuRemoveTrack = new MenuItem("Remove");
+    private final MenuItem menuRemoveGenre = new MenuItem("Remove");
+
     /**
      * **************************************************************************
      * Methods to initialize. *
@@ -112,10 +131,6 @@ public class DirectoryController implements Initializable {
             @Override
             public void handle(MouseEvent click) {
                 if (click.getClickCount() == 2) {
-                    // tracks.remove(tracksList.getSelectionModel().getSelectedItem());
-                    // tracksList.getItems().setAll(tracks);
-                    // System.out.println("Classe de l'objet sélectionné:" + Track.class);
-                    //use this to do whatever you want to. Open Link etc.
                     playMedia();
                 }
             }
@@ -136,6 +151,44 @@ public class DirectoryController implements Initializable {
                     searchKeyWords();
                 });
 
+        // setting the context menu
+        trackContextMenu.getItems().addAll(menuEditTrack, menuRemoveTrack);
+        genreContextMenu.getItems().addAll(menuEditGenre, menuRemoveGenre);
+
+        tracksList.setContextMenu(trackContextMenu);
+
+        menuRemoveTrack.setOnAction((a) -> {
+            try {
+                removeTrack();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        menuEditTrack.setOnAction((e) -> {
+            try {
+                editTrack();
+            } catch (Exception t) {
+                t.printStackTrace();
+            }
+        });
+
+        menuRemoveGenre.setOnAction((a) -> {
+            try {
+                removeGenre();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        menuEditGenre.setOnAction((e) -> {
+            try {
+                editGenre();
+            } catch (Exception t) {
+                t.printStackTrace();
+            }
+        });
+
         try {
             initializeConnexion();
         } catch (Exception e) {
@@ -144,7 +197,7 @@ public class DirectoryController implements Initializable {
         }
     }
 
-    private void initializeConnexion() throws Exception {
+    public void initializeConnexion() throws Exception {
         connectionSource = null;
         // create our data-source for the database
         try {
@@ -152,13 +205,17 @@ public class DirectoryController implements Initializable {
             // setup our database and DAOs
             musiclibraryDao = DaoManager.createDao(connectionSource, MusicLibrary.class);
             genreDao = DaoManager.createDao(connectionSource, Genre.class);
+            trackDao = DaoManager.createDao(connectionSource, Track.class);
             // library = musiclibraryDao.queryForId(DIRECTORY);
             library = musiclibraryDao.queryForAll().get(0);
-            directoryLabel.setText(library.toString());
-            // genresList.getItems().setAll(library.getArrayGenres());
-            populateGenres(library.getArrayGenres());
+            if (!Files.isDirectory(Path.of(library.getDirectory()))) {
+                musiclibraryDao.updateId(library, System.getProperty("user.home"));
+            }
 
-            // Initializing the tracks ArrayList
+            directoryLabel.setText(library.toString());
+
+            // Initializing the tracks list and the buttons
+            populateGenres(library.getArrayGenres());
             aTracks = library.getArrayTracks();
             tracksList.getItems().setAll(aTracks);
         } finally {
@@ -175,11 +232,16 @@ public class DirectoryController implements Initializable {
      * Methods to handle the music. *
      * *************************************************************************
      */
-    public void playMedia() {
+    private void playMedia() {
         Object selectedTrack = tracksList.getSelectionModel().getSelectedItem();
         if (selectedTrack != null) {
+            if (!Files.isRegularFile(Path.of(((Track) selectedTrack).getPath()))) {
+                Alert alert = new Alert(AlertType.WARNING, ((Track) selectedTrack).getPath() + " has been removed.");
+                alert.show();
+                return;
+            }
             try {
-                media = new Media(((Track) selectedTrack).getPath());
+                media = new Media(new File(((Track) selectedTrack).getPath()).toURI().toString());
                 trackInfoLabel.setText("loaded: " + ((Track) selectedTrack).toString());
                 if (mediaPlayer != null) {
                     mediaPlayer.stop();
@@ -192,13 +254,14 @@ public class DirectoryController implements Initializable {
                 mediaPlayer.play();
                 beginTimer();
             } catch (MediaException e) {
+                Alert alert = new Alert(AlertType.WARNING, "I cannot play " + ((Track) selectedTrack).getPath() + "\nPlease check the file!");
+                alert.show();
                 e.printStackTrace();
             }
         }
     }
 
     public void playpauseMedia() {
-        // library.setDirectory("/home/lemerle");
         if (mediaPlayer != null) {
             if (mediaPlayer.getStatus() == MediaPlayer.Status.READY || mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED || mediaPlayer.getStatus() == MediaPlayer.Status.STOPPED) {
                 mediaPlayer.play();
@@ -224,7 +287,7 @@ public class DirectoryController implements Initializable {
         }
     }
 
-    public void setVolume() {
+    private void setVolume() {
         if (mediaPlayer != null) {
             mediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
         }
@@ -246,7 +309,7 @@ public class DirectoryController implements Initializable {
         }
     }
 
-    public void beginTimer() {
+    private void beginTimer() {
         if (timer == null) {
             timer = new Timer();
         } else {
@@ -273,19 +336,23 @@ public class DirectoryController implements Initializable {
      * *************************************************************************
      */
     public void selectTracksByGenre(String genreLabel) throws SQLException {
-        Genre selectedGenre = genreDao.queryForId(genreLabel);
-        if (searchField.getText().equals("")) {
-            if (selectedGenre != null) {
-                tracksList.getItems().setAll(selectedGenre.getArrayTracks());
-            } else {
-                tracksList.getItems().setAll(library.getArrayTracks());
-            }
+        if (genreLabel.equals(EMPTYNESS)) {
+            tracksList.getItems().setAll(library.getEmptyGenreArrayTracks());
         } else {
-            if (selectedGenre != null) {
-                tracksList.getItems().setAll(fTracks.stream()
-                        .filter(t -> ((Track) t).getArrayGenres().contains((Genre) selectedGenre))
-                        .map(t -> (Track) t)
-                        .collect(toCollection(ArrayList::new)));
+            Genre selectedGenre = genreDao.queryForId(genreLabel);
+            if (searchField.getText().equals("")) {
+                if (selectedGenre != null) {
+                    tracksList.getItems().setAll(selectedGenre.getArrayTracks());
+                } else {
+                    tracksList.getItems().setAll(library.getArrayTracks());
+                }
+            } else {
+                if (selectedGenre != null) {
+                    tracksList.getItems().setAll(fTracks.stream()
+                            .filter(t -> ((Track) t).getArrayGenres().contains((Genre) selectedGenre))
+                            .map(t -> (Track) t)
+                            .collect(toCollection(ArrayList::new)));
+                }
             }
         }
     }
@@ -294,7 +361,7 @@ public class DirectoryController implements Initializable {
         Set<Genre> hGenres = new HashSet<>();
         String[] keyWords = searchField.getText().split(" ");
         if (searchModeChoice.getValue().equals("Or")) {
-            hTracks = new HashSet<>();
+            hTracks.removeAll(hTracks);
             for (String str : keyWords) {
                 aTracks.stream()
                         .filter(t -> t.getKeyWordString().toLowerCase().contains(str.toLowerCase()))
@@ -316,20 +383,14 @@ public class DirectoryController implements Initializable {
         fTracks.stream()
                 .map(t -> t.getArrayGenres())
                 .forEach(hGenres::addAll);
-
-        // Debugging purpose
-        // System.out.println("Nombre de genres:" + hGenres.size());              
-        // genresList.getItems().setAll(hGenres.stream()
-        //        .sorted(comparing(Genre::getLabel))
-        //        .collect(toCollection(ArrayList::new)));
         populateGenres(hGenres.stream()
                 .sorted(comparing(Genre::getLabel))
                 .collect(toCollection(ArrayList::new)));
     }
 
-    public void populateGenres(ArrayList<Genre> cGenres) {
+    private void populateGenres(ArrayList<Genre> cGenres) {
         genresGrid.getChildren().removeAll(genresButtons);
-        genresButtons = new ArrayList<>();
+        genresButtons.removeAll(genresButtons);
 
         for (int i = 0; i < cGenres.size(); i++) {
             Button nButton = new Button(cGenres.get(i).getLabel());
@@ -344,9 +405,29 @@ public class DirectoryController implements Initializable {
                     }
                 }
             });
+
+            nButton.setContextMenu(genreContextMenu);
             genresButtons.add(nButton);
             genresGrid.add(genresButtons.get(i), i % NB_COLUMNS, i / NB_COLUMNS, 1, 1);
         }
+        // Ajout d'un bouton supplementaire pour les genres vides
+        Button nButton = new Button(EMPTYNESS);
+        nButton.setMinWidth(BUTTON_MIN_WIDTH);
+        nButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                try {
+                    selectTracksByGenre(nButton.getText());
+                } catch (SQLException s) {
+                    s.printStackTrace();
+                }
+            }
+        });
+
+        nButton.setContextMenu(genreContextMenu);
+        genresButtons.add(nButton);
+        int i = cGenres.size();
+        genresGrid.add(genresButtons.get(i), i % NB_COLUMNS, i / NB_COLUMNS, 1, 1);
     }
 
     /**
@@ -356,7 +437,7 @@ public class DirectoryController implements Initializable {
      */
     public void chooseDirectory() throws Exception {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        if (Files.isDirectory(Paths.get(directoryLabel.getText()))) {
+        if (Files.isDirectory(Path.of(directoryLabel.getText()))) {
             directoryChooser.setInitialDirectory(new File(directoryLabel.getText()));
         } else {
             directoryChooser.setInitialDirectory(new File(System.getProperty("user.home")));
@@ -368,33 +449,44 @@ public class DirectoryController implements Initializable {
     }
 
     public void refreshLibrary() throws Exception {
-        if (directoryLabel.getText().equals(library.getDirectory())) {
-        } else {
+        if (!directoryLabel.getText().equals(library.getDirectory())) {
             musiclibraryDao.updateId(library, directoryLabel.getText());
         }
+        Alert alert = new Alert(AlertType.CONFIRMATION, "This may take about one minute. Are you sure?");
+        alert.showAndWait()
+                .filter(r -> r.equals(ButtonType.CANCEL))
+                .ifPresent(r -> {
+                    return;
+                });
+
         musiclibraryDao.refresh(library);
-        // Let's try with foreach instead:
         List<Path> pathList = new ArrayList<>();
-        Dao<Track, String> trackDao;
         String[] listGenres;
         try {
             connectionSource = new JdbcConnectionSource(DATABASE_URL);
-            trackDao = DaoManager.createDao(connectionSource, Track.class);
             TableUtils.clearTable(connectionSource, TrackGenre.class);
             TableUtils.clearTable(connectionSource, Genre.class);
             TableUtils.clearTable(connectionSource, Track.class);
-            pathList = Files.walk(Paths.get(library.getDirectory())).map(Path::normalize)
+
+            // in case the music directory has been removed by accident.
+            if (!Files.isDirectory(Path.of(library.getDirectory()))) {
+                Alert alertDirectory = new Alert(AlertType.WARNING, library.getDirectory() + " has been removed.");
+                alertDirectory.show();
+                initializeConnexion();
+                return;
+            }
+            pathList = Files.walk(Path.of(library.getDirectory())).map(Path::normalize)
                     .filter(Files::isRegularFile)
                     .filter(path -> path.getFileName().toString().endsWith(".mp3"))
                     .collect(Collectors.toList());
 
             for (Path path : pathList) {
-                String songPath = path.toFile().toURI().toString();
-                System.out.println("Fichier examine:" + path.toString());
-                MP3Utils mp3Utils = new MP3Utils(path.toString());
+                String songPath = path.toString();
+                // System.out.println("Fichier examine:" + path.toString());
+                MP3Util mp3Util = new MP3Util(path.toString());
 
-                if (mp3Utils.isValid()) {
-                    Map mp3Tags = mp3Utils.getMp3Tags();
+                if (mp3Util.isValid()) {
+                    Map mp3Tags = mp3Util.getMp3Tags();
                     Track newTrack = new Track(songPath, mp3Tags.get("Title").toString(), mp3Tags.get("Artist").toString(), library);
                     library.addTrack(newTrack);
                     trackDao.refresh(newTrack);
@@ -406,7 +498,8 @@ public class DirectoryController implements Initializable {
                         newTrack.addGenre(newGenre);
                     }
                 } else {
-                    System.out.println("Fichier non valide!");
+                    Alert alertPath = new Alert(AlertType.WARNING, path.toString() + " has been corrupted or removed.");
+                    alertPath.show();
                 }
             }
             // genresList.getItems().setAll(library.getArrayGenres());
@@ -420,6 +513,121 @@ public class DirectoryController implements Initializable {
                 connectionSource.close();
                 connectionSource = null;
             }
+        }
+    }
+
+    /**
+     * **************************************************************************
+     * Methods to edit or remove tracks and genres. *
+     * *************************************************************************
+     */
+    private void editTrack() throws Exception {
+        Object selectedObject = tracksList.getSelectionModel().getSelectedItem();
+        if (selectedObject != null) {
+            Track selectedTrack = (Track) selectedObject;
+            selectedTrack.setGenresString();
+            // We now need to open a new window and pass the track information to it
+            Stage editTrackStage = new Stage();
+            editTrackStage.initModality(Modality.NONE);
+            editTrackStage.initOwner(directoryPane.getScene().getWindow());
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("track.fxml"));
+            Scene scene = new Scene(loader.load());
+            editTrackStage.setScene(scene);
+            TrackController controller = loader.getController();
+            controller.initTrack(selectedTrack);
+            editTrackStage.show();
+        }
+    }
+
+    private void editGenre() throws Exception {
+        String genreLabel = "";
+        for (Button b : genresButtons) {
+            if (b.isFocused()) {
+                genreLabel = b.getText();
+            }
+        }
+        Genre selectedGenre = genreDao.queryForId(genreLabel);
+        if (selectedGenre != null) {
+            // We now need to open a new window and pass the genre information to it
+            Stage editGenreStage = new Stage();
+            editGenreStage.initModality(Modality.NONE);
+            editGenreStage.initOwner(directoryPane.getScene().getWindow());
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("genre.fxml"));
+            Scene scene = new Scene(loader.load());
+            editGenreStage.setScene(scene);
+            GenreController controller = loader.getController();
+            controller.initGenre(selectedGenre);
+            editGenreStage.show();
+        } else {
+            return;
+        }
+    }
+
+    private void removeTrack() throws Exception {
+        Object selectedTrack = tracksList.getSelectionModel().getSelectedItem();
+        if (selectedTrack != null) {
+            // First, database operations
+            // As far as I have understood cascade deleting is not implemented in ormlite
+            // So we have to delete the tracksgenres before deleting the track
+            // As a reminder, tracksgenres is an intermediate class only used to create a many2many relation
+            // between tracks and genres.
+            ((Track) selectedTrack).getGenres().removeAll(((Track) selectedTrack).getGenres());
+            library.getTracks().remove((Track) selectedTrack);
+            library.cleanGenres();
+
+            // populate the buttons and the track lists
+            aTracks = library.getArrayTracks();
+            tracksList.getItems().setAll(aTracks);
+            populateGenres(library.getArrayGenres());
+
+            // Next, file deletion
+            Files.deleteIfExists(Path.of(((Track) selectedTrack).getPath()));
+        }
+    }
+
+    private void removeGenre() throws Exception {
+        String genreLabel = "";
+        MP3Util mp3Util;
+        ArrayList<Track> modifiedTracks;
+        Map dataMap = new HashMap<String, String>();
+        dataMap.put("Title", "");
+        dataMap.put("Artist", "");
+        dataMap.put("Genres", "");
+        for (Button b : genresButtons) {
+            if (b.isFocused()) {
+                genreLabel = b.getText();
+            }
+        }
+
+        Genre selectedGenre = genreDao.queryForId(genreLabel);
+        if (selectedGenre != null) {
+            //let's first record the tracks on which we should modify the tags
+            modifiedTracks = selectedGenre.getArrayTracks();
+            // on elimine les genres des tracks en question            
+            selectedGenre.getTracks().removeAll(selectedGenre.getTracks());
+            library.getGenres().remove(selectedGenre);
+            // Now let's modify the tags
+            for (Track t : modifiedTracks) {
+                t.setGenresString();
+                dataMap.replace("Title", t.getTitle());
+                dataMap.replace("Artist", t.getArtist());
+                dataMap.replace("Genres", t.getGenresString());
+                mp3Util = new MP3Util(t.getPath());
+                if (mp3Util.isValid()) {
+                    mp3Util.setMp3Tags(dataMap);
+                } else {
+                    Alert alert = new Alert(AlertType.WARNING, t.getPath() + " has been corrupted or removed.");
+                    alert.show();
+                    return;
+                }
+            }
+
+            // populate the buttons and the tracks list
+            populateGenres(library.getArrayGenres());
+            aTracks = library.getArrayTracks();
+            tracksList.getItems().setAll(aTracks);
         }
     }
 }

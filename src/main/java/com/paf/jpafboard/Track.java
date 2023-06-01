@@ -1,8 +1,8 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
-
 package com.paf.jpafboard;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.j256.ormlite.dao.ForeignCollection;
@@ -11,110 +11,126 @@ import java.util.ArrayList;
 import java.util.Objects;
 import static java.util.stream.Collectors.toCollection;
 
-
 /**
- * A given Track object contains the infos related to a given track (artist, name...) and has a many2many relation 
- * with Genre objects.
- * Warning! In the pafboard Genre means "keyword". Hence, the music library should be configured so that
- * the usual genre tag contains a coma separated value list of genre.
+ * A given Track object contains the infos related to a given track (artist,
+ * name...) and has a many2many relation with Genre objects. Warning! In the
+ * pafboard Genre means "keyword". Hence, the music library should be configured
+ * so that the usual genre tag contains a coma separated value list of genre.
  */
 @DatabaseTable(tableName = "tracks")
 public class Track {
-	// for QueryBuilder to be able to find the fields
-        public static final String PATH_FIELD_NAME = "path";
-        public static final String TITLE_FIELD_NAME = "title";
-        public static final String ARTIST_FIELD_NAME = "artist";
-        public static final String LIBRARY_ID_FIELD_NAME = "directory";
+    // for QueryBuilder to be able to find the fields
 
-	@DatabaseField(columnName = PATH_FIELD_NAME, id=true, canBeNull = false)
-	private String path;        
-        
-	@DatabaseField(columnName = TITLE_FIELD_NAME, canBeNull = true)
-	private String title;
+    public static final String PATH_FIELD_NAME = "path";
+    public static final String TITLE_FIELD_NAME = "title";
+    public static final String ARTIST_FIELD_NAME = "artist";
+    public static final String LIBRARY_ID_FIELD_NAME = "directory";
 
-	@DatabaseField(columnName = ARTIST_FIELD_NAME, canBeNull = true)
-	private String artist;
-        
-        @DatabaseField(foreign = true,  foreignAutoRefresh = false, columnName = LIBRARY_ID_FIELD_NAME)
-	MusicLibrary library;
+    @DatabaseField(columnName = PATH_FIELD_NAME, id = true, canBeNull = false)
+    private String path;
 
-	@ForeignCollectionField
-	private ForeignCollection<TrackGenre> trackgenres;
+    @DatabaseField(columnName = TITLE_FIELD_NAME, canBeNull = true)
+    private String title;
 
-	Track() {
-		// all persisted classes must define a no-arg constructor with at least package visibility
-	}
-        
+    @DatabaseField(columnName = ARTIST_FIELD_NAME, canBeNull = true)
+    private String artist;
 
-	public Track(String path, String name, String artist, MusicLibrary library) {
-		this.path = path;
-                this.title = name;
-                this.artist = artist;
-                this.library = library;
-	}
+    @DatabaseField(foreign = true, foreignAutoRefresh = false, columnName = LIBRARY_ID_FIELD_NAME)
+    MusicLibrary library;
 
-        public String getPath() {
-		return path;
-	}
+    @ForeignCollectionField
+    private ForeignCollection<TrackGenre> trackgenres;
+    
+    private String genresString;
 
-	public void setPath(String path) {
-		this.path = path;
-	}
-        
-	public String getTitle() {
-		return title;
-	}
+    Track() {
+        // all persisted classes must define a no-arg constructor with at least package visibility
+    }
 
-        public void setTitle(String title) {
-		this.title = title;
-	}
+    public Track(String path, String name, String artist, MusicLibrary library) {
+        this.path = path;
+        this.title = name;
+        this.artist = artist;
+        this.library = library;
+    }
 
-	public String getArtist() {
-		return artist;
-	}
-        
-	public void setArtist(String artist) {
-		this.artist = artist;
-	}        
-        
-	public ForeignCollection<TrackGenre> getGenres() {
-		return trackgenres;
-	}
-        
-        public void addGenre(Genre genre) {
-            TrackGenre newTrackGenre = new TrackGenre(this,genre);
-            if (!trackgenres.contains(newTrackGenre)) {
-                trackgenres.add(newTrackGenre);
-            }
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getArtist() {
+        return artist;
+    }
+
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
+
+    public ForeignCollection<TrackGenre> getGenres() {
+        return trackgenres;
+    }
+
+    public void addGenre(Genre genre) {
+        TrackGenre newTrackGenre = new TrackGenre(this, genre);
+        if (!trackgenres.contains(newTrackGenre)) {
+            trackgenres.add(newTrackGenre);
         }
+    }
 
-        
-        public ArrayList<Genre> getArrayGenres() {
-            return trackgenres.stream()
-                                .map(t->t.getGenre())
-                                .collect(toCollection(ArrayList::new));
-        }
-        
-        public String getKeyWordString() {
-            StringBuilder str = new StringBuilder(" "  + artist + " " + title);            
+    public ArrayList<Genre> getArrayGenres() {
+        return trackgenres.stream()
+                .map(t -> t.getGenre())
+                .collect(toCollection(ArrayList::new));
+    }
+
+    public String getKeyWordString() {
+        StringBuilder str = new StringBuilder(" " + artist + " " + title);
+        getArrayGenres().forEach((g) -> {
+            str.append(" ");
+            str.append(g.getLabel());
+        });
+        return str.toString();
+    }
+
+    public void setGenresString() {
+        String tempStr;
+        StringBuilder str = new StringBuilder();
+        if (!getArrayGenres().isEmpty()) {
             getArrayGenres().forEach((g) -> {
-                str.append(" ");
-                str.append(g.getLabel());
-            });
-            return str.toString();
-        }
-
-         public String getGenresString() {
-            StringBuilder str = new StringBuilder("(");
-            getArrayGenres().forEach((g) -> {                
                 str.append(g.getLabel());
                 str.append(", ");
             });
             str.deleteCharAt(str.length() - 2);
-            str.append(")");
-            return str.toString();
         }
-                
+        tempStr = str.toString();
+        if (!tempStr.equals("")) {
+            this.genresString = tempStr.substring(0,tempStr.length()-1);
+        } else {
+            this.genresString = tempStr;
+        }
+    }
+    
+    public String getGenresString() {
+        return genresString;
+    }
+
+    public MusicLibrary getLibrary() {
+        return library;
+    }
+
+    
     @Override
     public int hashCode() {
         int hash = 7;
@@ -137,8 +153,8 @@ public class Track {
         return Objects.equals(this.path, other.path);
     }
 
-        @Override
-        public String toString() {
-            return  title + " " + getGenresString();
-        }
+    @Override
+    public String toString() {
+        return title + " (" + getGenresString() + ")";
+    }
 }
