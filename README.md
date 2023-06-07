@@ -56,9 +56,9 @@ When you click on *Refresh*, the PAF board scans the music directory and udpates
 > **What's behind the scene?**
 > The software reads the MP3 tags. The keywords are read as a coma separated list from the tag *comment*. Therefore, you may use an external tool to update accordingly the mp3 tags. I recommend **easytag**.
 
-### Keywords features
+### Keywords' buttons
 
-Each keyword is displayed as a button and can be associated with one or several tracks.
+Each keyword can be associated with one or several tracks.
 
 You can delete or rename a keyword, using the right click contextual menu.
 
@@ -66,11 +66,14 @@ In order to avoid the *too many buttons issue*, you can merge two keywords.
 
 > Let's illustrate! Let's assume that you find the keywords *fear* and *panic* too close to stay distinct. Then you can choose to merge *fear* into *panic*. To do so, edit the *panic* keyword and rename it to *fear*.
 
+You cannot add a keyword directly to the grid
+
 ### Tracks list
 
-The tracks' list is on the right side of the panel. This list is automatically updated when hitting a keyword button, or when updating the research field.
+It is on the right side of the panel. This list is automatically updated when hitting a keyword button, or when updating the research field.
 
 If you want to play a track, just double click on it.
+Of course you may edit a track or delete it.
 
 ### Player
 
@@ -80,7 +83,7 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTAwMjM4NjEsNjEzNzg1NTAwLC0xMjcxMD
-Y5NTMxLDk4Mzc0OTkzMCwxOTk0NzE0MzA0LDQ4NDkxMjczMV19
-
+eyJoaXN0b3J5IjpbLTIwMDYwNjU2MTQsNjEzNzg1NTAwLC0xMj
+cxMDY5NTMxLDk4Mzc0OTkzMCwxOTk0NzE0MzA0LDQ4NDkxMjcz
+MV19
 -->
