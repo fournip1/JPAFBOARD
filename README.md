@@ -10,10 +10,12 @@ Alternatively, if you want to rely on a very small set of tracks, a plain music 
  ## Features
  The board allows the user to:
  * find music based on keywords, title, artist, using the search bar;
- * quickly access the list of keywords on a grid and get the songs associated to a given keyword by pressing on the related button;
+ * quickly access the list of keywords on a grid and get the songs associated to a given keyword by pressing the related button;
  * play a song by double clicking on it;
  * remove a song;
  *  edit a song and modify the title, artist and list of keywords associated to it;
+ * remove a song or a keyword;
+ * 
 ## Download and install
 All the files for a ready to use experience are in [this directory](/target).
 ### For debian-based distributions
@@ -32,6 +34,6 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTgzNzQ5OTMwLDE5OTQ3MTQzMDQsNDg0OT
-EyNzMxXX0=
+eyJoaXN0b3J5IjpbNDUwOTczMDk1LDk4Mzc0OTkzMCwxOTk0Nz
+E0MzA0LDQ4NDkxMjczMV19
 -->
