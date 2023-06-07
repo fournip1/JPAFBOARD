@@ -103,10 +103,16 @@ I used [ormlite package](https://ormlite.com/) to access and modify the data in 
 There was a bug invoking modules **ormlite.core** et and **ormlite.jdbc** simultaneously.
 
 I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe/ormlitebuild/5.1.1)
+
 As well, it was complex to debug the project since it runs javafx instead of java.
+
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
+
+### Want to contribute?
+
+If you are a developper and wish to contribute, provide advises or suggest modifications, feel free to drop me an email.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTkwNDI2Nzg4MiwzMDAwMTcyMzcsNjEzNz
+eyJoaXN0b3J5IjpbMTgxNjY1MDAzOCwzMDAwMTcyMzcsNjEzNz
 g1NTAwLC0xMjcxMDY5NTMxLDk4Mzc0OTkzMCwxOTk0NzE0MzA0
 LDQ4NDkxMjczMV19
 -->
