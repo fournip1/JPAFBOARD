@@ -90,6 +90,9 @@ On the bottom right side, you can see which track is loaded. **Be careful, if yo
 
 This is a ready to code Maven project. You can find all the informations in the ***pom.xml*** file.
 
+The graphical interface and the media player was built with javafx framework.
+
+To manage MP3 tags, I used [MP3agic library](
 
 
 ### Dependencies and modules
@@ -101,7 +104,7 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTQwMDc0ODgsMzAwMDE3MjM3LDYxMzc4NT
-UwMCwtMTI3MTA2OTUzMSw5ODM3NDk5MzAsMTk5NDcxNDMwNCw0
-ODQ5MTI3MzFdfQ==
+eyJoaXN0b3J5IjpbMTY3NTYzMTQyNSwzMDAwMTcyMzcsNjEzNz
+g1NTAwLC0xMjcxMDY5NTMxLDk4Mzc0OTkzMCwxOTk0NzE0MzA0
+LDQ4NDkxMjczMV19
 -->
