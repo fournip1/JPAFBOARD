@@ -3,7 +3,10 @@
 All the files for a ready to use experience are in [this directory](/target).
 ### For debian-based distributions
 You may use a ready made installer for debian (.deb). Simply run the command:
-> sudo dpkg -i 
+> sudo dpkg -i jpafboard_2.1-1_amd64.deb
+If you want to desinstall it, run:
+> sudo apt remove JPafBoard
+## For other
 ## You are an enduser
 
 ## You are a developper
@@ -12,5 +15,5 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDg0OTEyNzMxXX0=
+eyJoaXN0b3J5IjpbLTY2MTEyMzk0OCw0ODQ5MTI3MzFdfQ==
 -->
