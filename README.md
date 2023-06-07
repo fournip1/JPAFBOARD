@@ -82,7 +82,9 @@ Of course you may edit or delete a track, using the right-click contextual menu.
 
 ### Player
 
-The player is displayed on the bottom of the board. It has all the usual basic functions that you may expect. On the bottom right side, you can see which track is loaded.
+The player is displayed on the bottom of the board. It has all the usual basic functions that you may expect. 
+
+On the bottom right side, you can see which track is loaded. **Be careful, if you press the play button, this loaded track will be played or paused. To change the loaded track, you should inste**
 
 ## You are a developper
 There was a bug invoking modules **ormlite.core** et and **ormlite.jdbc** simultaneously.
@@ -90,7 +92,7 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTEwMjYzOTk3MiwzMDAwMTcyMzcsNjEzNz
+eyJoaXN0b3J5IjpbMTYwMjY4NTU1OSwzMDAwMTcyMzcsNjEzNz
 g1NTAwLC0xMjcxMDY5NTMxLDk4Mzc0OTkzMCwxOTk0NzE0MzA0
 LDQ4NDkxMjczMV19
 -->
