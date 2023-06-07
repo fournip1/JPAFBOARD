@@ -6,7 +6,7 @@ Of course a live musician is the ideal solution.
 Alternatively, if you want to rely on a very small set of tracks, a plain music board can work too.
  But in my case, I wanted to pick-up my song amongst a wide music library.
  That's why I designed this tool. **The basic principle underlying this tool is to associate keywords to tracks.**
- > For instance, suppose that you have a track with a j
+ > Suppose that you have a track with the sound of a running jigsaw. You can set the keywords ***fear***, ***forest***, ***accident***  
  ## Features
  The board allows the user to:
  * find music based on keywords, title, artist, using the search bar;
@@ -34,6 +34,6 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4NzQ2MzE1ODMsOTgzNzQ5OTMwLDE5OT
-Q3MTQzMDQsNDg0OTEyNzMxXX0=
+eyJoaXN0b3J5IjpbOTQwMzYzMTIsOTgzNzQ5OTMwLDE5OTQ3MT
+QzMDQsNDg0OTEyNzMxXX0=
 -->
