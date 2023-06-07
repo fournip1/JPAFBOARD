@@ -94,19 +94,19 @@ The graphical interface and the media player was built with javafx framework.
 
 To manage MP3 tags, I used the [MP3agic library](https://github.com/mpatric/mp3agic).
 
-Last but not least, data are stored in an sqlite database located in the *.jpafboard* directory installed in the user's home directory. I used ormlite package to access and modify the data. Pleas
+Last but not least, data are stored in an sqlite database located in the *.jpafboard* directory installed in the user's home directory. 
 
+I used [ormlite package](https://ormlite.com/) to access and modify the data in a quite straightforward way.
 
-### Dependencies and modules
-
-
+### Issues and bugs encountered
 
 There was a bug invoking modules **ormlite.core** et and **ormlite.jdbc** simultaneously.
+
 I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe/ormlitebuild/5.1.1)
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTY0MzkxODY2NiwzMDAwMTcyMzcsNjEzNz
+eyJoaXN0b3J5IjpbMTkwNDI2Nzg4MiwzMDAwMTcyMzcsNjEzNz
 g1NTAwLC0xMjcxMDY5NTMxLDk4Mzc0OTkzMCwxOTk0NzE0MzA0
 LDQ4NDkxMjczMV19
 -->
