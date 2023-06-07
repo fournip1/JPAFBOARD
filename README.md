@@ -78,9 +78,11 @@ Of course you may edit or delete a track, using the right-click contextual menu.
 
 > When editing a track, you can assign a set of keywords to it. The keywords should be entered as a coma separated list in the related field. ***If a keyword does not already exist, it is automatically created upon saving the track.***
 > 
-> ***Important note***: editing or deleting a track perform in parallel the operations to the file. 
+> ***Important note***: editing or deleting a track perform in parallel the operation on the actual file. 
 
 ### Player
+
+The player is displayed on the bottom of the board. It has all the usual basic functions that you may expect. On the bottom right side, you can see which track is loaded.
 
 ## You are a developper
 There was a bug invoking modules **ormlite.core** et and **ormlite.jdbc** simultaneously.
@@ -88,7 +90,7 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTcwNTI0NDg0LDMwMDAxNzIzNyw2MTM3OD
-U1MDAsLTEyNzEwNjk1MzEsOTgzNzQ5OTMwLDE5OTQ3MTQzMDQs
-NDg0OTEyNzMxXX0=
+eyJoaXN0b3J5IjpbMTEwMjYzOTk3MiwzMDAwMTcyMzcsNjEzNz
+g1NTAwLC0xMjcxMDY5NTMxLDk4Mzc0OTkzMCwxOTk0NzE0MzA0
+LDQ4NDkxMjczMV19
 -->
