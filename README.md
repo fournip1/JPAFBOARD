@@ -22,8 +22,10 @@ Up to now, this could either be achieved with a live musician or with a standard
  * edit a keyword;
  * remove a song or a keyword.
 
-Last but not least, in order to avoid the *too many buttons effect*, you can merge two keywords.
-> Let's illustrate! Let's assume that you find the keywords *fear* and *panic* too close to stay distinct. Then you can choose to merge the first one by the second.
+Last but not least, in order to avoid the *too many buttons issue*, you can merge two keywords.
+
+> Let's illustrate! Let's assume that you find the keywords *fear* and *panic* too close to stay distinct. Then you can choose to merge *fear* into *panic*. To do so, edit the *panic* keyword and rename it to *fear*.
+> 
 ## Download and install
 All the files for a ready to use experience are in [this directory](/target).
 ### For debian-based distributions
@@ -42,6 +44,6 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE0MDY5NjY0NDQsOTgzNzQ5OTMwLDE5OT
-Q3MTQzMDQsNDg0OTEyNzMxXX0=
+eyJoaXN0b3J5IjpbLTE0OTg4NDU1NCw5ODM3NDk5MzAsMTk5ND
+cxNDMwNCw0ODQ5MTI3MzFdfQ==
 -->
