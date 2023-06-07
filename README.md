@@ -60,7 +60,11 @@ When you click on *Refresh*, the PAF board scans the music directory and udpates
 > **What's behind the scene?**
 > The software reads the MP3 tags. The keywords are read as a coma separated list from the tag *comment*. Therefore, you may use an external tool to update accordingly the mp3 tags. I recommend **easytag**.
 
-### 
+### Keywords features
+
+Each keyword is displayed as a button and can be associated with one or several tracks.
+
+You can delete or rename a keyword. 
 
 ## You are a developper
 There was a bug invoking modules **ormlite.core** et and **ormlite.jdbc** simultaneously.
@@ -68,7 +72,7 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNzk4ODIxNDgwLDYxMzc4NTUwMCwtMTI3MT
-A2OTUzMSw5ODM3NDk5MzAsMTk5NDcxNDMwNCw0ODQ5MTI3MzFd
-fQ==
+eyJoaXN0b3J5IjpbMjAzMDU1NDI4Myw2MTM3ODU1MDAsLTEyNz
+EwNjk1MzEsOTgzNzQ5OTMwLDE5OTQ3MTQzMDQsNDg0OTEyNzMx
+XX0=
 -->
