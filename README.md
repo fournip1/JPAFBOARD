@@ -42,9 +42,11 @@ If you want to desinstall it, run:
 ### For windows and Mac OS.
 
  1. Install java 17 by downloading and double clicking on the installer in the [very same folder](/installers).
-2. Download and double click on the Java-PafBoard... jar to launch the application. 
+2. Download and double click on the Java-PafBoard... jar to launch the application.
+3. 
 > If it does not work, please check that you have downloaded the files corresponding to your operating systems.
-> When 
+> You may as well try the *open with* command and check that the jar file is correctly opened with Java 17.
+> If it still doesn't work, please [drop me an email](mailto:fournip1@hotmail.com).
 ## You are an enduser
 
 ## You are a developper
@@ -53,6 +55,6 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTczMzAwNTQ4LDk4Mzc0OTkzMCwxOTk0Nz
+eyJoaXN0b3J5IjpbNzU3NTEyNTI3LDk4Mzc0OTkzMCwxOTk0Nz
 E0MzA0LDQ4NDkxMjczMV19
 -->
