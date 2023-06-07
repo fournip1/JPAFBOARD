@@ -74,8 +74,9 @@ It is on the right side of the panel. This list is automatically updated when hi
 
 If you want to play a track, just double click on it.
 
-Of course you may edit a track or delete it, using the right-click contextual menu.
+Of course you may edit or delete a track, using the right-click contextual menu.
 
+> When editing a track, you can assign a set of keywords to it. The keywords should be as a coma separated list 
 
 
 ### Player
@@ -86,7 +87,7 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMzAwMDE3MjM3LDYxMzc4NTUwMCwtMTI3MT
-A2OTUzMSw5ODM3NDk5MzAsMTk5NDcxNDMwNCw0ODQ5MTI3MzFd
-fQ==
+eyJoaXN0b3J5IjpbLTc5Mjk0NTk3OSwzMDAwMTcyMzcsNjEzNz
+g1NTAwLC0xMjcxMDY5NTMxLDk4Mzc0OTkzMCwxOTk0NzE0MzA0
+LDQ4NDkxMjczMV19
 -->
