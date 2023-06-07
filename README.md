@@ -21,10 +21,6 @@ Up to now, this could either be achieved with a live musician or with a standard
  *  edit a song and modify the title, artist and list of keywords associated to it;
  * edit a keyword;
  * remove a song or a keyword.
-
-Last but not least, in order to avoid the *too many buttons issue*, you can merge two keywords.
-
-> Let's illustrate! Let's assume that you find the keywords *fear* and *panic* too close to stay distinct. Then you can choose to merge *fear* into *panic*. To do so, edit the *panic* keyword and rename it to *fear*.
 > 
 ## Download and install
 
@@ -64,7 +60,15 @@ When you click on *Refresh*, the PAF board scans the music directory and udpates
 
 Each keyword is displayed as a button and can be associated with one or several tracks.
 
-You can delete or rename a keyword. 
+You can delete or rename a keyword, using the right click contextual menu.
+
+In order to avoid the *too many buttons issue*, you can merge two keywords.
+
+> Let's illustrate! Let's assume that you find the keywords *fear* and *panic* too close to stay distinct. Then you can choose to merge *fear* into *panic*. To do so, edit the *panic* keyword and rename it to *fear*.
+
+### Tracks features
+
+The tracks'list is on the right side of t
 
 ## You are a developper
 There was a bug invoking modules **ormlite.core** et and **ormlite.jdbc** simultaneously.
@@ -72,7 +76,7 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjAzMDU1NDI4Myw2MTM3ODU1MDAsLTEyNz
+eyJoaXN0b3J5IjpbLTExODYxMTA1Myw2MTM3ODU1MDAsLTEyNz
 EwNjk1MzEsOTgzNzQ5OTMwLDE5OTQ3MTQzMDQsNDg0OTEyNzMx
 XX0=
 -->
