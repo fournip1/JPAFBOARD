@@ -1,3 +1,6 @@
+# Welcome to the PAF Board tool
+## You are an enduser
+## You are a developper
 There was a bug invoking modules ormlite.core et and ormlite.jdbc simultaneously.
 I solved it using a taylored made library:
 https://jitpack.io/#com.gitlab.grrfe/ormlitebuild/5.1.1
@@ -7,5 +10,5 @@ https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-n
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQ1MjQzMDEzMl19
+eyJoaXN0b3J5IjpbLTYyNzU1MTcwOF19
 -->
