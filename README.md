@@ -6,8 +6,9 @@ You may use a ready made installer for debian (.deb). Simply run the command:
 > sudo dpkg -i jpafboard_2.1-1_amd64.deb
 If you want to desinstall it, run:
 > sudo apt remove JPafBoard
-### For other operating systems
-First install java 17 version by double clicking on the installer, depending file. 
+### For windows and Mac OS.
+First install java 17 version by double clicking on the installer in the very same folder.
+Once Javinstalled, you can double click on the Java-PafBoard... jar file to launch the application. 
 ## You are an enduser
 
 ## You are a developper
@@ -16,5 +17,5 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQwNTI1ODUwNyw0ODQ5MTI3MzFdfQ==
+eyJoaXN0b3J5IjpbMTQxNDI0MDM5OSw0ODQ5MTI3MzFdfQ==
 -->
