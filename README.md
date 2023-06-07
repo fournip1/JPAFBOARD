@@ -3,10 +3,11 @@ This small Java application is a bespoke media player taylored for **sound stage
 
 > In an improv' show, the sound manager should be able to play the right track at the right moment instantaneously, depending on what's happening on stage.
 
-Up to now, this could either be achieved with a live musician or with a standard music board. Of course a live musician is the ideal solution.  Alternatively, if you want to rely on a very small set of tracks, a plain music board can work too.
+Up to now, this could either be achieved with a live musician or with a standard music board. Of course a live musician is the ideal solution.  Alternatively, if you want to rely on a very small set of tracks, a straightforward music board can do the job too.
  
- But in my case, I wanted to pick-up my song amongst a wide music library.
- That's why I designed this tool. **The basic principle underlying this tool is to associate keywords to tracks.**
+ But in my case, I wanted to pick-up my song amongst a wide music library. That's why I designed this tool. 
+ 
+ **The basic principle underlying this tool is to associate keywords to tracks.**
  
  > Let's illustrate! Suppose that you have a track with the sound of a running jigsaw. You can set the keywords ***fear***, ***forest***, ***accident*** for this track. Doing so the song will be accessible behind the buttons corresponding to these keywords.  
  ## Features
@@ -38,6 +39,6 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzOTEwNTAwMTYsOTgzNzQ5OTMwLDE5OT
+eyJoaXN0b3J5IjpbLTEzOTY0OTkyNTMsOTgzNzQ5OTMwLDE5OT
 Q3MTQzMDQsNDg0OTEyNzMxXX0=
 -->
