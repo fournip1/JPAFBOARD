@@ -66,9 +66,13 @@ In order to avoid the *too many buttons issue*, you can merge two keywords.
 
 > Let's illustrate! Let's assume that you find the keywords *fear* and *panic* too close to stay distinct. Then you can choose to merge *fear* into *panic*. To do so, edit the *panic* keyword and rename it to *fear*.
 
-### Tracks features
+### Tracks list
 
-The tracks'list is on the right side of t
+The tracks' list is on the right side of the panel. This list is automatically updated when hitting a keyword button, or when updating the research field.
+
+If you want to play a track, just double click on it.
+
+### Player
 
 ## You are a developper
 There was a bug invoking modules **ormlite.core** et and **ormlite.jdbc** simultaneously.
@@ -76,7 +80,7 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExODYxMTA1Myw2MTM3ODU1MDAsLTEyNz
-EwNjk1MzEsOTgzNzQ5OTMwLDE5OTQ3MTQzMDQsNDg0OTEyNzMx
-XX0=
+eyJoaXN0b3J5IjpbOTAwMjM4NjEsNjEzNzg1NTAwLC0xMjcxMD
+Y5NTMxLDk4Mzc0OTkzMCwxOTk0NzE0MzA0LDQ4NDkxMjczMV19
+
 -->
