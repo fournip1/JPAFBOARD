@@ -88,7 +88,9 @@ On the bottom right side, you can see which track is loaded. **Be careful, if yo
 
 ## For developpers
 
-This is a Maven project. You can find all the i
+This is a ready to code Maven project. You can find all the informations in the ***pom.xml*** file.
+
+
 
 ### Dependencies and modules
 
@@ -99,7 +101,7 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTk2MTkwMjY3NCwzMDAwMTcyMzcsNjEzNz
-g1NTAwLC0xMjcxMDY5NTMxLDk4Mzc0OTkzMCwxOTk0NzE0MzA0
-LDQ4NDkxMjczMV19
+eyJoaXN0b3J5IjpbMTQwMDc0ODgsMzAwMDE3MjM3LDYxMzc4NT
+UwMCwtMTI3MTA2OTUzMSw5ODM3NDk5MzAsMTk5NDcxNDMwNCw0
+ODQ5MTI3MzFdfQ==
 -->
