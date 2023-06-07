@@ -51,9 +51,9 @@ If you want to desinstall it, run:
 ## How to use the board?
 ### Music library features
 
-On the top of the screen you will see the directory used by the board. You can change this default directory and point to an empty one that you created. 
+On the top of the screen you will see the directory used by the board. You can change this default directory and point to any other one. 
 
-Alternatively, if you do not want to start from scratch, you may download and extract [this sample directory](/installers/sample.zip).
+If you do not want to start from scratch, you may download and extract [this sample directory](/installers/sample.zip) and then change the default music directory.
 
 
 
@@ -63,6 +63,6 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTk5MDU5Nzc3OSwtMTI3MTA2OTUzMSw5OD
-M3NDk5MzAsMTk5NDcxNDMwNCw0ODQ5MTI3MzFdfQ==
+eyJoaXN0b3J5IjpbLTE2MTMxMzg1NjksLTEyNzEwNjk1MzEsOT
+gzNzQ5OTMwLDE5OTQ3MTQzMDQsNDg0OTEyNzMxXX0=
 -->
