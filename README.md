@@ -53,8 +53,9 @@ If you want to desinstall it, run:
 
 On the top of the screen you will see the directory used by the board. You can change this default directory and point to any other one. 
 
-If you do not want to start from scratch, you may download and extract [this sample directory](/installers/sample.zip) and then change the default music directory.
+If you do not want to start from scratch, you may download and extract [this sample directory](/installers/sample.zip) and make the music directory to point on this one.
 
+When you click on *Refresh*, the PAF board scans the music directory and udpate the music database a.
 
 
 ## You are a developper
@@ -63,6 +64,6 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2MTMxMzg1NjksLTEyNzEwNjk1MzEsOT
+eyJoaXN0b3J5IjpbLTE0Nzg0NTc1OTMsLTEyNzEwNjk1MzEsOT
 gzNzQ5OTMwLDE5OTQ3MTQzMDQsNDg0OTEyNzMxXX0=
 -->
