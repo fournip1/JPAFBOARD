@@ -110,9 +110,9 @@ I followed this [explanation on stack exchange](https://stackoverflow.com/questi
 
 ### Want to contribute?
 
-If you are a developper and wish to contribute, provide advises or suggest modifications, feel free to drop me an email.
+If you are a developper and wish to contribute, provide advises or suggest modifications, feel free to [drop me an email](mailto:fournip1@hotmail.com)..
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTgxNjY1MDAzOCwzMDAwMTcyMzcsNjEzNz
-g1NTAwLC0xMjcxMDY5NTMxLDk4Mzc0OTkzMCwxOTk0NzE0MzA0
-LDQ4NDkxMjczMV19
+eyJoaXN0b3J5IjpbNDQ4MjEzMjcwLDMwMDAxNzIzNyw2MTM3OD
+U1MDAsLTEyNzEwNjk1MzEsOTgzNzQ5OTMwLDE5OTQ3MTQzMDQs
+NDg0OTEyNzMxXX0=
 -->
