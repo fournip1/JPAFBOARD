@@ -6,3 +6,6 @@ I followed this explanation:
 https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033
 
 
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbLTQ1MjQzMDEzMl19
+-->
