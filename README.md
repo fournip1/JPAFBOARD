@@ -55,8 +55,10 @@ On the top of the screen you will see the directory used by the board. You can c
 
 If you do not want to start from scratch, you may download and extract [this sample directory](/installers/sample.zip) and make the music directory to point on this one.
 
-When you click on *Refresh*, the PAF board scans the music directory and udpate the music database a.
+When you click on *Refresh*, the PAF board scans the music directory and udpate the music database accordingly.
 
+> **What's behind the scene?**
+> The software reads the MP3 tags. The keywords are stored as a coma separated list  
 
 ## You are a developper
 There was a bug invoking modules **ormlite.core** et and **ormlite.jdbc** simultaneously.
@@ -64,6 +66,6 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE0Nzg0NTc1OTMsLTEyNzEwNjk1MzEsOT
+eyJoaXN0b3J5IjpbLTE0NDI1OTA5ODgsLTEyNzEwNjk1MzEsOT
 gzNzQ5OTMwLDE5OTQ3MTQzMDQsNDg0OTEyNzMxXX0=
 -->
