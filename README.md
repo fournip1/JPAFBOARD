@@ -16,7 +16,7 @@ Alternatively, if you want to rely on a very small set of tracks, a plain music 
  *  edit a song and modify the title, artist and list of keywords associated to it;
  * edit a keyword;
  * remove a song or a keyword.
-Last but not least, in order to avoid the ***too many buttons 
+Last but not least, in order to avoid the ***too many buttons effect***, you can merge two keywords.
 ## Download and install
 All the files for a ready to use experience are in [this directory](/target).
 ### For debian-based distributions
@@ -35,6 +35,6 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTQ5NTY3MjczLDk4Mzc0OTkzMCwxOTk0Nz
-E0MzA0LDQ4NDkxMjczMV19
+eyJoaXN0b3J5IjpbNzI1NzAzODcsOTgzNzQ5OTMwLDE5OTQ3MT
+QzMDQsNDg0OTEyNzMxXX0=
 -->
