@@ -1,7 +1,7 @@
 # Welcome to the PAF Board
 This small Java application is a bespoke media player taylored for sound stage manager working on improv' show.
 On such a show, the sound manager should be able to play the right track at the right moment instantaneously.
-In order to meet these requistes 
+In order to meet this requirement, the sound manager should find the track using simple keywords. 
 ## Download and install
 All the files for a ready to use experience are in [this directory](/target).
 ### For debian-based distributions
@@ -20,5 +20,5 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjAzNDAwNzc0MCw0ODQ5MTI3MzFdfQ==
+eyJoaXN0b3J5IjpbMTk5NDcxNDMwNCw0ODQ5MTI3MzFdfQ==
 -->
