@@ -58,7 +58,7 @@ If you do not want to start from scratch, you may download and extract [this sam
 When you click on *Refresh*, the PAF board scans the music directory and udpate the music database accordingly.
 
 > **What's behind the scene?**
-> The software reads the MP3 tags. The keywords are stored as a coma separated list  
+> The software reads the MP3 tags. The keywords are read as a coma separated list from the tag *comment*. Therefore, you may use an external tool to update accordingly the mp3 tags. I recommend 
 
 ## You are a developper
 There was a bug invoking modules **ormlite.core** et and **ormlite.jdbc** simultaneously.
@@ -66,6 +66,6 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE0NDI1OTA5ODgsLTEyNzEwNjk1MzEsOT
-gzNzQ5OTMwLDE5OTQ3MTQzMDQsNDg0OTEyNzMxXX0=
+eyJoaXN0b3J5IjpbNjEzNzg1NTAwLC0xMjcxMDY5NTMxLDk4Mz
+c0OTkzMCwxOTk0NzE0MzA0LDQ4NDkxMjczMV19
 -->
