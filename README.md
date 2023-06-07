@@ -66,14 +66,17 @@ In order to avoid the *too many buttons issue*, you can merge two keywords.
 
 > Let's illustrate! Let's assume that you find the keywords *fear* and *panic* too close to stay distinct. Then you can choose to merge *fear* into *panic*. To do so, edit the *panic* keyword and rename it to *fear*.
 
-You cannot add a keyword directly to the grid
+You cannot add a keyword directly to the grid. Instead you should modify the related tracks. Please see the next section for details.
 
 ### Tracks list
 
 It is on the right side of the panel. This list is automatically updated when hitting a keyword button, or when updating the research field.
 
 If you want to play a track, just double click on it.
-Of course you may edit a track or delete it.
+
+Of course you may edit a track or delete it, using the right-click contextual menu.
+
+
 
 ### Player
 
@@ -83,7 +86,7 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIwMDYwNjU2MTQsNjEzNzg1NTAwLC0xMj
-cxMDY5NTMxLDk4Mzc0OTkzMCwxOTk0NzE0MzA0LDQ4NDkxMjcz
-MV19
+eyJoaXN0b3J5IjpbMzAwMDE3MjM3LDYxMzc4NTUwMCwtMTI3MT
+A2OTUzMSw5ODM3NDk5MzAsMTk5NDcxNDMwNCw0ODQ5MTI3MzFd
+fQ==
 -->
