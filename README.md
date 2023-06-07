@@ -50,8 +50,12 @@ If you want to desinstall it, run:
 
 ## How to use the board?
 ### Music library features
-You can start with an empty directory or with [this sample directory](/sample).
-On the top of the screen you will see the directory used by the board. You can change this default directory and point to an empty one that you created. Alternatively, If you do not want to start from scratch, you may download and extract the sample directory.
+
+On the top of the screen you will see the directory used by the board. You can change this default directory and point to an empty one that you created. 
+
+Alternatively, if you do not want to start from scratch, you may download and extract [this sample directory](/installers/sample.zip).
+
+
 
 ## You are a developper
 There was a bug invoking modules **ormlite.core** et and **ormlite.jdbc** simultaneously.
@@ -59,6 +63,6 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTc2ODQxMTEyOSwtMTI3MTA2OTUzMSw5OD
+eyJoaXN0b3J5IjpbMTk5MDU5Nzc3OSwtMTI3MTA2OTUzMSw5OD
 M3NDk5MzAsMTk5NDcxNDMwNCw0ODQ5MTI3MzFdfQ==
 -->
