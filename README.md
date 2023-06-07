@@ -6,12 +6,13 @@ Of course a live musician is the ideal solution.
 Alternatively, if you want to rely on a very small set of tracks, a plain music board can work too.
  But in my case, I wanted to pick-up my song amongst a wide music library.
  That's why I designed this tool.
+ 
  ## Features
  The board allows the user to:
  * find music based on keywords, title, artist, using the search bar;
  * quickly access the list of keywords on a grid and get the songs associated to a given keyword by pressing on the related button;
  * play a song by double clicking on it;
- * remove a song (right-click 
+ * remove a song;
  *  edit a song and modify the title, artist and list of keywords associated to it;
 ## Download and install
 All the files for a ready to use experience are in [this directory](/target).
@@ -31,6 +32,6 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTMzOTUzNDk0LDE5OTQ3MTQzMDQsNDg0OT
+eyJoaXN0b3J5IjpbOTgzNzQ5OTMwLDE5OTQ3MTQzMDQsNDg0OT
 EyNzMxXX0=
 -->
