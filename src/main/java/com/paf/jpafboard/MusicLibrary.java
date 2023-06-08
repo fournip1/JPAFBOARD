@@ -112,7 +112,6 @@ public class MusicLibrary {
         genres.forEach((g) -> {
             if (g.getTracks().isEmpty()) {
                 genres.remove(g);
-                System.out.println("removed: " + g.getLabel());
             }
         });
     }

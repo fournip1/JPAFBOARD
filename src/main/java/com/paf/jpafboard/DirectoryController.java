@@ -247,7 +247,6 @@ public class DirectoryController implements Initializable {
         } finally {
             // destroy the data source which should close underlying connections
             if (connectionSource != null) {
-                // System.out.println("Connexion fermée pour le répertoire.");
                 connectionSource.close();
                 connectionSource = null;
             }
@@ -386,7 +385,7 @@ public class DirectoryController implements Initializable {
 
     public void searchKeyWords() {
         Set<Genre> hGenres = new HashSet<>();
-        ArrayList<String> keyWords = library.convertGenresString(searchField.getText());
+        String[] keyWords = searchField.getText().split(" ");
         if (searchModeChoice.getValue().equals("Or")) {
             hTracks.removeAll(hTracks);
             for (String str : keyWords) {
@@ -649,10 +648,8 @@ public class DirectoryController implements Initializable {
                 dataMap.replace("Title", t.getTitle());
                 dataMap.replace("Artist", t.getArtist());
                 dataMap.replace("Genres", t.getGenresString());
-                System.out.println(t.getGenresString());
                 mp3Util = new MP3Util(t.getPath());
                 if (mp3Util.isValid()) {
-                    System.out.println("Genres:"+ dataMap.get("Genres"));
                     mp3Util.setMp3Tags(dataMap);
                 }
             }
@@ -699,11 +696,9 @@ public class DirectoryController implements Initializable {
         }
         e.setDropCompleted(success);
         e.consume();
-        // System.out.println("drag done");
     }
 
     private void mouseDragOver(final DragEvent e) {
-        // System.out.println("drag detected");
         final Dragboard db = e.getDragboard();
         final boolean isAccepted = db.getFiles().get(0).getName().toLowerCase().endsWith(".mp3");
 

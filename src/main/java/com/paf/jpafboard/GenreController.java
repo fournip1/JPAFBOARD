@@ -70,7 +70,6 @@ public class GenreController implements Initializable {
         } finally {
             // destroy the data source which should close underlying connections
             if (connectionSource != null) {
-                // System.out.println("Connexion fermée pour le genre.");
                 connectionSource.close();
                 connectionSource = null;
             }

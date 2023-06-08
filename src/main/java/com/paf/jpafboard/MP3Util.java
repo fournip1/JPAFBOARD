@@ -77,8 +77,6 @@ public class MP3Util {
             if (id3v2Tag.getComment() != null) {
                 dataMap.replace("Genres", id3v2Tag.getComment());
             }
-        } else {
-            System.out.println("No tags found");
         }
         return dataMap;
     }

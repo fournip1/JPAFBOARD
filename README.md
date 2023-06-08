@@ -1,39 +1,40 @@
-
-
-# Welcome to the PAF Board project
+# Ze PAF Board
 
 This small Java application is a bespoke media player taylored for **sound stage managers working on improv' shows**.
 
 > In an improv' show, the sound manager should be able to play the right track at the right moment instantaneously, depending on what's happening on stage.
 
 Up to now, this could either be achieved with a live musician or with a standard music board. Of course a live musician is the ideal solution.  Alternatively, if you want to rely on a very small set of tracks, a straightforward music board can do the job too.
- 
- But in my case, I wanted to pick-up my song amongst a wide music library. That's why I designed this tool. 
- 
- **The basic principle underlying this tool is to associate keywords to tracks.**
- 
- > Let's illustrate! Suppose that you have a track with the sound of a running chainsaw. You can set the keywords *fear*, *forest*, *accident* for this track. Doing so the song will be accessible behind the buttons corresponding to these keywords.  
- 
- ## Features
- 
- The board allows the user to:
- * find music based on keywords, title, artist, using the search bar;
- * quickly access the list of keywords on a grid and get the songs associated to a given keyword by pressing the related button;
- * add songs to the music database with a straightforward drag and drop;
- * play a song by double clicking on it;
- * edit a song and modify the title, artist and list of keywords associated to it;
- * edit a keyword;
- * remove a song or a keyword.
+
+But in my case, I wanted to pick-up my song amongst a wide music library. That's why I designed this tool.
+
+**The basic principle underlying this tool is to associate keywords to tracks.**
+
+> Let's illustrate! Suppose that you have a track with the sound of a running chainsaw. You can set the keywords *fear*, *forest*, *accident* for this track. Doing so the song will be accessible behind the buttons corresponding to these keywords.
+
+## Features
+
+The board allows the user to:
+
+* find music based on keywords, title, artist, using the search bar;
+* quickly access the list of keywords on a grid and get the songs associated to a given keyword by pressing the related button;
+* add songs to the music database with a straightforward drag and drop;
+* play a song by double clicking on it;
+* edit a song and modify the title, artist and list of keywords associated to it;
+* edit a keyword;
+* remove a song or a keyword.
 
 ## Download and install
 
-All the files for a ready to use experience are in [this directory](/installers).
+All the needed files to run the application are in [this directory](/installers).
 
 ### For debian-based distributions (ubuntu, mint, raspbian...)
 
 You may use a ready made installer for debian (.deb). Simply run the command:
 
-> sudo dpkg -i jpafboard_2.1-1_amd64.deb
+> sudo dpkg -i jpafboard_2.1_amd64.deb
+
+It creates the shortcut ***JPafBoard*** in your applications' menu.
 
 If you want to desinstall it, run:
 
@@ -41,7 +42,7 @@ If you want to desinstall it, run:
 
 ### For windows and Mac OS.
 
- 1. Make sure that java 17 is set on your computer by downloading and installing jdk 17 [here for windows 64B](/https://download.oracle.com/java/17/archive/jdk-17.0.7_windows-x64_bin.msi) or [there for mac OS](https://download.oracle.com/java/17/archive/jdk-17.0.7_macos-x64_bin.dmg).
+1. Make sure that java 17 is set on your computer by downloading and installing jdk 17 [here for windows 64B](/https://download.oracle.com/java/17/archive/jdk-17.0.7_windows-x64_bin.msi) or [there for mac OS](https://download.oracle.com/java/17/archive/jdk-17.0.7_macos-x64_bin.dmg).
 2. Download and double click on the Java-PafBoard... jar to launch the application.
 
 > If it does not work, please check that you have downloaded the files corresponding to your operating system.
@@ -52,18 +53,22 @@ If you want to desinstall it, run:
 
 ### Music library features
 
-On the top of the screen you will see the directory used by the board. You can change this default directory and point to any other one. 
+![](/screenshots/directory.png)
+
+On the top of the screen you will see the directory used by the board. You can change this default directory and point to any other one.
 
 If you do not want to start from scratch, you may download and extract [this sample directory](/installers/sample.zip) and make the music directory to point on this one.
 
-When you click on *Refresh*, the PAF board scans the music directory and udpates the music database accordingly.
+When you click on *Refresh*, the PAF board scans the music directory and udpates the music database accordingly. You only need to refresh at your first installation or when you modify externally the music directory.
 
-***This tool works with mp3 files only. You may use a music converter if you wish to upload other types of audio files.
+**This tool works with mp3 files only. You may use a music converter if you wish to upload other types of audio files.**
 
 > **What's behind the scene?**
 > The software reads the MP3 tags. The keywords are read as a coma separated list from the tag *comment*. Therefore, you may use an external tool to update accordingly the mp3 tags. I recommend **easytag**.
 
 ### Keywords' buttons
+
+![](/screenshots/buttons.png)
 
 Each keyword can be associated with one or several tracks.
 
@@ -77,21 +82,27 @@ You cannot add a keyword button directly to the grid. Instead you should modify 
 
 ### Tracks list
 
+![](/screenshots/trackslist.png)
+
 It is on the right side of the panel. This list is automatically updated when hitting a keyword button, or when updating the research field.
 
 If you want to play a track, just double click on it.
 
 Of course you may edit or delete a track, using the right-click contextual menu.
 
+![](/screenshots/trackedition.png)
+
 To add an mp3 track from another directory, **simply drag and drop it on the track list**.
 
 > When editing a track, you can assign a set of keywords to it. The keywords should be entered as a coma separated list in the related field. ***If a keyword does not already exist, it is automatically created upon saving the track.***
-> 
-> ***Important note***: editing or deleting a track perform in parallel the operation on the actual mp3 file. 
+>
+> ***Important note***: editing or deleting a track perform in parallel the operation on the actual mp3 file.
 
 ### Player
 
-The player is displayed on the bottom of the board. It has all the usual basic functions that you may expect. 
+![](/screenshots/player.png)
+
+The player is displayed at the bottom of the board. It has all the usual basic functions that you may expect.
 
 On the bottom right side, you can see which track is loaded. **Be careful, if you press the play button, this loaded track will be played or paused. To change the loaded track, you should instead double click on an item of the track list.**
 
@@ -103,7 +114,7 @@ The graphical interface and the media player was built with javafx framework.
 
 To manage MP3 tags, I used the [MP3agic library](https://github.com/mpatric/mp3agic).
 
-Last but not least, data are stored in an sqlite database located in the ***.jpafboard*** directory installed in the user's home directory. 
+Last but not least, data are stored in an sqlite database located in the ***.jpafboard*** directory installed in the user's home directory.
 
 I used [ormlite package](https://ormlite.com/) to access and modify the data in a quite straightforward way.
 
@@ -116,6 +127,10 @@ I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe
 As well, it was complex to debug the project since it runs javafx instead of java.
 
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
+
+### Next steps
+
+Work on the skin of the application and make a bit of css.
 
 ### Want to contribute?
 
