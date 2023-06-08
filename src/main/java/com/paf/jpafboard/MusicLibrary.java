@@ -11,6 +11,8 @@ import com.j256.ormlite.table.DatabaseTable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import static java.util.stream.Collectors.toCollection;
 // import javafx.embed.swing.JFXPanel;
 
@@ -62,11 +64,14 @@ public class MusicLibrary {
         }
     }
 
-    public void addTrack(Track track) {
-        if (!tracks.contains(track)) {
-            tracks.add(track);
+    public boolean addTrack(Track newTrack) {
+            if (!tracks.contains(newTrack)) {
+                tracks.add(newTrack);
+                return true;
+            } else {
+                return false;
+            }
         }
-    }
 
     public ArrayList<Genre> getArrayGenres() {
         return genres.stream()
@@ -83,7 +88,7 @@ public class MusicLibrary {
         });
         return aTracks;
     }
-    
+
     public ArrayList<Track> getEmptyGenreArrayTracks() {
         ArrayList<Track> aTracks = tracks.stream()
                 .filter(track -> track.getGenres().isEmpty())
@@ -93,7 +98,7 @@ public class MusicLibrary {
             t.setGenresString();
         });
         return aTracks;
-    }    
+    }
 
     public HashSet<Track> getSetTracks() {
         return new HashSet<>(tracks);
@@ -117,4 +122,19 @@ public class MusicLibrary {
         return directory;
     }
 
+    /**
+     * **************************************************************************
+     * Methods to handle genre strings.                                         *
+     * *************************************************************************
+     */    
+    
+    public ArrayList<String> convertGenresString(String genresString) {
+        String[] genresDraftList = genresString.split(",");
+        ArrayList<String> genresFinalList = new ArrayList<>();
+        for (String g:genresDraftList) {
+            if (!g.trim().isEmpty())
+                genresFinalList.add(g.trim().substring(0, 1).toUpperCase() + g.trim().substring(1).toLowerCase());
+        }
+        return genresFinalList;
+    }
 }

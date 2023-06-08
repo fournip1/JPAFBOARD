@@ -5,4 +5,5 @@
 /src/main/java/com/paf/jpafboard/PafplayerController.java
 /src/main/java/com/paf/jpafboard/OKApp.java
 /src/main/resources/com/paf/jpafboard/test.fxml
+/target
 **/*.log

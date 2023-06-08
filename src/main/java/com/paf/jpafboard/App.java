@@ -15,7 +15,6 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -25,7 +24,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 /**
@@ -105,7 +103,7 @@ public class App extends Application {
         return DATABASE_URL;
     }
     
-    public static void initializeConnexion() throws Exception {
-        mainController.initializeConnexion();
+    public static void initializeButtonsAndLists() {
+        mainController.initializeButtonsAndLists();
     }
 }

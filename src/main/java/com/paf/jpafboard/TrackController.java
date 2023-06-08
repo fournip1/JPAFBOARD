@@ -9,6 +9,7 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -130,7 +131,7 @@ public class TrackController implements Initializable {
     }
 
     public void saveTrack() throws Exception {
-        String[] listGenres = dataMap.get("Genres").toString().split(", ");
+        ArrayList<String> listGenres = library.convertGenresString(dataMap.get("Genres").toString());
         try {
             mp3Util = new MP3Util(track.getPath());
             if (mp3Util.isValid()) {
@@ -154,7 +155,7 @@ public class TrackController implements Initializable {
         }
         // to refresh I use the App instance.
         library.cleanGenres();
-        App.initializeConnexion();
+        App.initializeButtonsAndLists();
         cancelEdition();
     }
 
@@ -165,7 +166,7 @@ public class TrackController implements Initializable {
 
     public void refreshKeyWordsLabel(String stringKeyWords) {
         StringBuilder str = new StringBuilder();
-        String[] listGenres = stringKeyWords.split(", ");
+        ArrayList<String> listGenres = library.convertGenresString(stringKeyWords);
         for (String g : listGenres) {
             str.append("<" + g + ">");
         }

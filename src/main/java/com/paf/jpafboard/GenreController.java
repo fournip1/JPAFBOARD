@@ -70,6 +70,7 @@ public class GenreController implements Initializable {
         } finally {
             // destroy the data source which should close underlying connections
             if (connectionSource != null) {
+                // System.out.println("Connexion fermée pour le genre.");
                 connectionSource.close();
                 connectionSource = null;
             }
@@ -151,7 +152,7 @@ public class GenreController implements Initializable {
             }
         }
         // to refresh I use the App instance.
-        App.initializeConnexion();
+        App.initializeButtonsAndLists();
         cancelEdition();
     }
 

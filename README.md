@@ -12,7 +12,7 @@ Up to now, this could either be achieved with a live musician or with a standard
  
  **The basic principle underlying this tool is to associate keywords to tracks.**
  
- > Let's illustrate! Suppose that you have a track with the sound of a running jigsaw. You can set the keywords *fear*, *forest*, *accident* for this track. Doing so the song will be accessible behind the buttons corresponding to these keywords.  
+ > Let's illustrate! Suppose that you have a track with the sound of a running chainsaw. You can set the keywords *fear*, *forest*, *accident* for this track. Doing so the song will be accessible behind the buttons corresponding to these keywords.  
  
  ## Features
  

@@ -15,10 +15,10 @@ import com.mpatric.mp3agic.NotSupportedException;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.scene.control.Alert;
 
 /**
  *
@@ -39,7 +39,8 @@ public class MP3Util {
         try {
             this.mp3File = new Mp3File(mp3Path);
         } catch (Exception e) {
-            System.out.println("Exception trouvée");
+            Alert alertPath = new Alert(Alert.AlertType.WARNING, mp3Path + " has been corrupted or removed.");
+            alertPath.show();
             this.valid = false;
         }
     }
