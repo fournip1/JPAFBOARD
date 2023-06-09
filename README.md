@@ -1,51 +1,51 @@
 # Ze PAF Board
 
-This small Java application is a bespoke media player taylored for **sound stage managers working on improv' shows**.
+This small Java application is a bespoke media player designed for **sound stage managers working on improv' shows**.
 
 > In an improv' show, the sound manager should be able to play the right track at the right moment instantaneously, depending on what's happening on stage.
 
-Up to now, this could either be achieved with a live musician or with a standard music board. Of course a live musician is the ideal solution.  Alternatively, if you want to rely on a very small set of tracks, a straightforward music board can do the job too.
+Until now, this could be achieved either with a live musician or with a standard music board. Obviously, a live musician is the ideal solution.  Alternatively, if you want to rely on a very small set of tracks, a simple music board can do the job too.
 
-But in my case, I wanted to pick-up my song amongst a wide music library. That's why I designed this tool.
+But in my case, I wanted to pick up my song from a large music library. That's why I created this tool.
 
 **The basic principle underlying this tool is to associate keywords to tracks.**
 
-> Let's illustrate! Suppose that you have a track with the sound of a running chainsaw. You can set the keywords *fear*, *forest*, *accident* for this track. Doing so the song will be accessible behind the buttons corresponding to these keywords.
+> Let's illustrate! Suppose that you have a track with the sound of a chainsaw running. You can set the keywords *fear*, *forest*, *accident* for this track. The song will then be accessible via the buttons corresponding to these keywords.
 
 ## Features
 
 The board allows the user to:
 
 * find music based on keywords, title, artist, using the search bar;
-* quickly access the list of keywords on a grid and get the songs associated to a given keyword by pressing the related button;
-* add songs to the music database with a straightforward drag and drop;
-* play a song by double clicking on it;
-* edit a song and modify the title, artist and list of keywords associated to it;
+* quickly access the list of keywords on a grid and get the songs associated to a given keyword by pressing the corresponding button;
+* add songs to the music database by simply dragging and dropping;
+* play a song by double-clicking on it;
+* edit a song and modify the title, artist and list of keywords;
 * edit a keyword;
 * remove a song or a keyword.
 
 ## Download and install
 
-All the needed files to run the application are in [this directory](/installers).
+All the files needed  to run the application are in [this directory](/installers).
 
-### For debian-based distributions (ubuntu, mint, raspbian...)
+### For Debian-based distributions (ubuntu, mint, raspbian...)
 
 You may use a ready made installer for debian (.deb). Simply run the command:
 
 > sudo dpkg -i jpafboard_2.1_amd64.deb
 
-It creates the shortcut ***JPafBoard*** in your applications' menu.
+This will create a ***JPafBoard*** shortcut  in your applications menu.
 
-If you want to desinstall it, run:
+If you want to uninstall it, run:
 
 > sudo apt remove JPafBoard
 
-### For windows and Mac OS.
+### For Windows and Mac OS.
 
-1. Make sure that java 17 is set on your computer by downloading and installing jdk 17 [here for windows 64B](/https://download.oracle.com/java/17/archive/jdk-17.0.7_windows-x64_bin.msi) or [there for mac OS](https://download.oracle.com/java/17/archive/jdk-17.0.7_macos-x64_bin.dmg).
+1. Make sure that Java 17 is set on your computer by downloading and installing jdk 17 [here for Windows 64B](/https://download.oracle.com/java/17/archive/jdk-17.0.7_windows-x64_bin.msi) or [there for mac OS](https://download.oracle.com/java/17/archive/jdk-17.0.7_macos-x64_bin.dmg).
 2. Download and double click on the Java-PafBoard... jar to launch the application.
 
-> If it does not work, please check that you have downloaded the files corresponding to your operating system.
+> If it does not work, please check that you have downloaded the correct files for your operating system.
 > You may as well try the *open with* command and check that the jar file is correctly opened with Java 17.
 > If it still doesn't work, please [drop me an email](mailto:fournip1@hotmail.com).
 
@@ -57,22 +57,22 @@ If you want to desinstall it, run:
 
 On the top of the screen you will see the directory used by the board. You can change this default directory and point to any other one.
 
-If you do not want to start from scratch, you may download and extract [this sample directory](/installers/sample.zip) and make the music directory to point on this one.
+If you do not want to start from scratch, you may download and extract [this sample directory](/installers/sample.zip) and change the music directory to point to it.
 
-When you click on *Refresh*, the PAF board scans the music directory and udpates the music database accordingly. You only need to refresh at your first installation or when you modify externally the music directory.
+When you click on *Refresh*, the PAF board will scan the music directory and udpate the music database accordingly. You only need to refresh if you are installing for the first time or if you modify the music directory externally.
 
-**This tool works with mp3 files only. You may use a music converter if you wish to upload other types of audio files.**
+**This tool only works with mp3 files. You may use a music converter if you wish to upload other types of audio files.**
 
 > **What's behind the scene?**
-> The software reads the MP3 tags. The keywords are read as a coma separated list from the tag *comment*. Therefore, you may use an external tool to update accordingly the mp3 tags. I recommend **easytag**.
+> The software reads the MP3 tags. The keywords are read as a coma separated list from the *comment* tag. Therefore, you may use an external tool to update accordingly the mp3 tags. I recommend **easytag**.
 
 ### Keywords' buttons
 
 ![](/screenshots/buttons.png)
 
-Each keyword can be associated with one or several tracks.
+Each keyword can be associated with one or more tracks.
 
-You can delete or rename a keyword, using the right click contextual menu.
+You can delete or rename a keyword, using the right-click context menu.
 
 In order to avoid the *too many buttons issue*, you can merge two keywords.
 
