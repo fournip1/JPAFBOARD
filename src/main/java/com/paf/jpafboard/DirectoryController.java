@@ -112,7 +112,7 @@ public class DirectoryController implements Initializable {
 
     // Setting the grid objects
     private final int NB_COLUMNS = 5;
-    private final int BUTTON_MIN_WIDTH = 140;
+    private final double BUTTON_MAX_HEIGHT = 48;
     private ArrayList<Button> genresButtons = new ArrayList<>();
 
     private final ContextMenu trackContextMenu = new ContextMenu();
@@ -417,10 +417,15 @@ public class DirectoryController implements Initializable {
     private void populateGenres(ArrayList<Genre> cGenres) {
         genresGrid.getChildren().removeAll(genresButtons);
         genresButtons.removeAll(genresButtons);
-
+        double buttonHeight = Math.floor(genresGrid.getPrefHeight() / Math.ceil(cGenres.size() / NB_COLUMNS));
+        double buttonWidth = Math.floor(genresGrid.getPrefWidth() / NB_COLUMNS);
+        // System.out.println("taille boutton: " + buttonHeight);
         for (int i = 0; i < cGenres.size(); i++) {
             Button nButton = new Button(cGenres.get(i).getLabel());
-            nButton.setMinWidth(BUTTON_MIN_WIDTH);
+            nButton.setId("keywordsButton");
+            nButton.setPrefWidth(buttonWidth);
+            nButton.setPrefHeight(buttonHeight);
+            nButton.setMaxHeight(BUTTON_MAX_HEIGHT);
             nButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
@@ -438,7 +443,10 @@ public class DirectoryController implements Initializable {
         }
         // Ajout d'un bouton supplementaire pour les genres vides
         Button nButton = new Button(EMPTYNESS);
-        nButton.setMinWidth(BUTTON_MIN_WIDTH);
+        nButton.setId("keywordsButton");
+        nButton.setMinWidth(buttonWidth);
+        nButton.setPrefHeight(buttonHeight);
+        nButton.setMaxHeight(BUTTON_MAX_HEIGHT);
         nButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -633,7 +641,7 @@ public class DirectoryController implements Initializable {
         Optional<ButtonType> option = alert.showAndWait();
         if (option.get() == null || option.get() == ButtonType.CANCEL) {
             return;
-        } 
+        }
 
         Genre selectedGenre = genreDao.queryForId(genreLabel);
         if (selectedGenre != null) {
@@ -681,7 +689,6 @@ public class DirectoryController implements Initializable {
 
             try {
                 if (!Files.isRegularFile(Path.of(trackPath))) {
-                    // blablabla otototo
                     Files.copy(Path.of(file.getAbsolutePath()), Path.of(trackPath));
                     addTrack(trackPath);
                     initializeButtonsAndLists();

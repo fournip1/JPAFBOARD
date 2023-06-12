@@ -8,7 +8,7 @@
 <?import javafx.scene.control.cell.TextFieldTableCell?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" fx:id="trackPane" prefHeight="268.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.paf.jpafboard.TrackController">
+<AnchorPane id="AnchorPane" fx:id="trackPane" prefHeight="240.0" prefWidth="600.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.paf.jpafboard.TrackController">
     <children>
         <TableView fx:id="trackTable" editable="true" layoutX="19.0" layoutY="14.0" prefHeight="106.0" prefWidth="568.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="16.0">
             <columns>
@@ -38,8 +38,8 @@
                 </TableColumn>
             </columns>
         </TableView>
-        <Button fx:id="saveButton" layoutX="173.0" layoutY="214.0" mnemonicParsing="false" onAction="#saveTrack" prefHeight="35.0" prefWidth="110.0" text="Save" />
-        <Button fx:id="cancelButton" layoutX="283.0" layoutY="214.0" mnemonicParsing="false" onAction="#cancelEdition" prefHeight="35.0" prefWidth="110.0" text="Cancel" />
-      <Label fx:id="keywordsLabel" layoutX="16.0" layoutY="146.0" prefHeight="24.0" prefWidth="568.0" AnchorPane.bottomAnchor="98.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" />
+        <Button fx:id="saveButton" layoutX="192.0" layoutY="184.0" mnemonicParsing="false" onAction="#saveTrack" prefHeight="30.0" prefWidth="108.0" text="Save" />
+        <Button fx:id="cancelButton" layoutX="300.0" layoutY="184.0" mnemonicParsing="false" onAction="#cancelEdition" prefHeight="30.0" prefWidth="108.0" text="Cancel" />
+      <Label fx:id="keywordsLabel" layoutX="16.0" layoutY="143.0" prefHeight="24.0" prefWidth="568.0" AnchorPane.bottomAnchor="73.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" />
     </children>
 </AnchorPane>

@@ -12,6 +12,12 @@ But in my case, I wanted to pick up my song from a large music library. That's w
 
 > Let's illustrate! Suppose that you have a track with the sound of a chainsaw running. You can set the keywords *fear*, *forest*, *accident* for this track. The song will then be accessible via the buttons corresponding to these keywords.
 
+## Licence
+
+This software is published under GPL3 license. Please see the [details here](LICENSE.md).
+
+It uses the excellent Manjari font, which is published under [this license](OFL.txt).
+
 ## Features
 
 The board allows the user to:
@@ -105,6 +111,20 @@ To add an mp3 track from another directory, **simply drag and drop it on the tra
 The player is displayed at the bottom of the board. It has all the usual basic functions that you may expect.
 
 On the bottom right side, you can see which track is loaded. **Be careful, if you press the play button, this loaded track will be played or paused. To change the loaded track, you should instead double click on an item of the track list.**
+
+### Search bar
+
+![](/screenshots/searchbar.png)
+
+It works as a usual search field except that the use can choose the search mode, exclusive (and) or inclusive (or).
+
+If he chooses "or", it means that the tracks' list will contain all the tracks which match at least one of the word written.
+
+If he chooses "and", the application will return all the tracks which match all the words simultaneously.
+
+> The words are searched amongst the following track fields: keywords, artist, title. 
+> If you write in the search bar "Beethoven fear" with the exclusive search mode, there is a good chance that the tracks' list will contain all the scary Beethoven pieces.
+> On the other hand, if you write the same words with the inclusive search mode, the tracks list should contain both the Beethoven tracks and the tracks with the keyword *fear*.
 
 ## For developpers
 
