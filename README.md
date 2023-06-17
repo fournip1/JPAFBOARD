@@ -14,9 +14,9 @@ But in my case, I wanted to pick up my song from a large music library. That's w
 
 ## Licence
 
-This software is published under GPL3 license. Please see the [details here](LICENSE.md).
+This software is published under GPL3 license. Please see the [details here {_ext}](LICENSE.md).
 
-It uses the excellent Manjari font, which is published under [this license](OFL.txt).
+It uses the excellent Manjari font, which is published under [this license {_ext}](OFL.txt).
 
 ## Features
 
@@ -32,7 +32,7 @@ The board allows the user to:
 
 ## Download and install
 
-All the files needed  to run the application are in [this directory](/installers).
+All the files needed  to run the application are in [this directory {_ext}](/installers).
 
 ### For Debian-based distributions (ubuntu, mint, raspbian...)
 
@@ -52,12 +52,12 @@ You may download and double-click on the msi installer and follow a quite standa
 
 ### For Mac OS.
 
-1. Make sure that Java 17 is set on your computer by downloading and installing [jdk 17](https://download.oracle.com/java/17/archive/jdk-17.0.7_macos-x64_bin.dmg).
+1. Make sure that Java 17 is set on your computer by downloading and installing [jdk 17 {_ext}](https://download.oracle.com/java/17/archive/jdk-17.0.7_macos-x64_bin.dmg).
 2. Download and double click on the JPafBoard... jar to run the application.
 
 > If it does not work, please check that you have downloaded the correct files for your operating system.
 > You may as well try the *open with* command and check that the jar file is correctly opened with Java 17.
-> If it still doesn't work, please [drop me an email](mailto:fournip1@hotmail.com).
+> If it still doesn't work, please [drop me an email {_ext}](mailto:fournip1@hotmail.com).
 
 ## How to use the board?
 
@@ -136,28 +136,28 @@ This is a ready to code Maven project. You can find all the informations in the 
 
 The graphical interface and the media player was built with javafx framework.
 
-To manage MP3 tags, I used the [MP3agic library](https://github.com/mpatric/mp3agic).
+To manage MP3 tags, I used the [MP3agic library {_ext}](https://github.com/mpatric/mp3agic).
 
 Last but not least, data are stored in an sqlite database located in the ***.jpafboard*** directory installed in the user's home directory.
 
-I used [ormlite package](https://ormlite.com/) to access and modify the data in a quite straightforward way.
+I used [ormlite package {_ext}](https://ormlite.com/) to access and modify the data in a quite straightforward way.
 
 ### Issues and bugs encountered
 
 There was a bug invoking modules **ormlite.core** et and **ormlite.jdbc** simultaneously.
 
-I solved it using a [taylored made library](https://jitpack.io/#com.gitlab.grrfe/ormlitebuild/5.1.1)
+I solved it using a [taylored made library {_ext}](https://jitpack.io/#com.gitlab.grrfe/ormlitebuild/5.1.1)
 
 As well, it was complex to debug the project since it runs javafx instead of java.
 
-I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
+I followed this [explanation on stack exchange {_ext}](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 
 I found a bug with the loadfont instruction inside my css. I solved it by directly loading the font from the controller, which is not very coherent with the MVC coding method...
 
 ### Next steps
 
-Make an installer for Mac OS. If you have a Mac developper license and wish to help me on that, please [tell me](mailto:fournip1@hotmail.com).
+Make an installer for Mac OS. If you have a Mac developper license and wish to help me on that, please [tell me {_ext}](mailto:fournip1@hotmail.com).
 
 ### Want to contribute?
 
-If you are a developper and wish to contribute, provide advises or suggest modifications, feel free to [drop me an email](mailto:fournip1@hotmail.com).
+If you are a developper and wish to contribute, provide advises or suggest modifications, feel free to [drop me an email {_ext}](mailto:fournip1@hotmail.com).
