@@ -38,7 +38,7 @@ All the files needed  to run the application are in [this directory](/installers
 
 You may use a ready made installer for debian (.deb). Simply run the command:
 
-> sudo dpkg -i jpafboard_2.1_amd64.deb
+> sudo dpkg -i jpafboard_2.2_amd64.deb
 
 This will create a ***JPafBoard*** shortcut  in your applications menu.
 
@@ -46,10 +46,14 @@ If you want to uninstall it, run:
 
 > sudo apt remove JPafBoard
 
-### For Windows and Mac OS.
+### For Windows 
 
-1. Make sure that Java 17 is set on your computer by downloading and installing jdk 17 [here for Windows 64B](/https://download.oracle.com/java/17/archive/jdk-17.0.7_windows-x64_bin.msi) or [there for mac OS](https://download.oracle.com/java/17/archive/jdk-17.0.7_macos-x64_bin.dmg).
-2. Download and double click on the Java-PafBoard... jar to launch the application.
+You may download and double-click on the msi installer and follow a quite standard procedure.
+
+### For Mac OS.
+
+1. Make sure that Java 17 is set on your computer by downloading and installing [jdk 17](https://download.oracle.com/java/17/archive/jdk-17.0.7_macos-x64_bin.dmg).
+2. Download and double click on the JPafBoard... jar to run the application.
 
 > If it does not work, please check that you have downloaded the correct files for your operating system.
 > You may as well try the *open with* command and check that the jar file is correctly opened with Java 17.
@@ -98,7 +102,7 @@ Of course you may edit or delete a track, using the right-click contextual menu.
 
 ![](/screenshots/trackedition.png)
 
-To add an mp3 track from another directory, **simply drag and drop it on the track list**.
+To add an mp3 track from another directory, **simply drag and drop it onto the tracks list**.
 
 > When editing a track, you can assign a set of keywords to it. The keywords should be entered as a coma separated list in the related field. ***If a keyword does not already exist, it is automatically created upon saving the track.***
 >
@@ -116,13 +120,13 @@ On the bottom right side, you can see which track is loaded. **Be careful, if yo
 
 ![](/screenshots/searchbar.png)
 
-It works as a usual search field except that the use can choose the search mode, exclusive (and) or inclusive (or).
+It works as a usual search field except that you can choose the search mode, exclusive (and) or inclusive (or).
 
-If he chooses "or", it means that the tracks' list will contain all the tracks which match at least one of the word written.
+If you choose "or", it means that the tracks' list will contain all the tracks which match at least one of the word written.
 
-If he chooses "and", the application will return all the tracks which match all the words simultaneously.
+If you choose "and", the application will return all the tracks which match all the words simultaneously.
 
-> The words are searched amongst the following track fields: keywords, artist, title. 
+> The words are searched amongst the following track fields: keywords, artist, title.
 > If you write in the search bar "Beethoven fear" with the exclusive search mode, there is a good chance that the tracks' list will contain all the scary Beethoven pieces.
 > On the other hand, if you write the same words with the inclusive search mode, the tracks list should contain both the Beethoven tracks and the tracks with the keyword *fear*.
 
@@ -148,9 +152,11 @@ As well, it was complex to debug the project since it runs javafx instead of jav
 
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 
+I found a bug with the loadfont instruction inside my css. I solved it by directly loading the font from the controller, which is not very coherent with the MVC coding method...
+
 ### Next steps
 
-Work on the skin of the application and make a bit of css.
+Make an installer for Mac OS. If you have a Mac developper license and wish to help me on that, please [tell me](mailto:fournip1@hotmail.com).
 
 ### Want to contribute?
 

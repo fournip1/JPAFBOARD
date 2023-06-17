@@ -2,7 +2,11 @@ jpackage --input target/ \
   --name JPafBoard \
   --main-jar JPafBoard-2.1-shaded.jar \
   --main-class com.paf.jpafboard.Main \
-  --app-version 2.1 \
+  --app-version 2.2 \
+  --icon logo/jpafboard.png \
+  --vendor "PAF Fournié" \
+  --license-file LICENSE.md \
+  --about-url  "https://github.com/fournip1/jpafboard" \
   --linux-shortcut \
   --type deb \
   --java-options '--enable-preview'

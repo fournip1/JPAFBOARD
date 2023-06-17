@@ -25,6 +25,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.text.Font;
 
 /**
  *
@@ -60,6 +62,10 @@ public class App extends Application {
         scene = new Scene(loader.load());
         stage.setTitle("Ze PAF Board");
         stage.setScene(scene);
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("icon.png")));
+                
+//        //load the fonts
+//        Font.loadFont(getClass().getResource("Manjari-Bold.ttf").toExternalForm(),13);
         mainController = loader.getController();            
         stage.show();
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {

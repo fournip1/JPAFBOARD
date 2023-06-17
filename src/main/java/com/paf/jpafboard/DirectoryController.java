@@ -28,6 +28,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toCollection;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -55,6 +57,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.text.Font;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -111,8 +114,11 @@ public class DirectoryController implements Initializable {
     private ChoiceBox searchModeChoice;
 
     // Setting the grid objects
-    private final int NB_COLUMNS = 5;
-    private final double BUTTON_MAX_HEIGHT = 48;
+    private final int NB_COLUMNS = 6;
+    private final double BUTTON_MAX_HEIGHT = 40;
+    private Font manjariFont;
+    
+    
     private ArrayList<Button> genresButtons = new ArrayList<>();
 
     private final ContextMenu trackContextMenu = new ContextMenu();
@@ -139,7 +145,21 @@ public class DirectoryController implements Initializable {
                 }
             }
         });
+        // We had a listener in case the user wants to resize the scene.
+        // NOT USED YET!!!
 
+//        genresGrid.widthProperty().addListener(new ChangeListener<Number>() {
+//            public void changed(ObservableValue<? extends Number> observableValue, Number oldGridWidth, Number newGridWidth) {
+//                System.out.println("Width: " + newGridWidth);
+//            }
+//        });
+//        
+//        genresGrid.heightProperty().addListener(new ChangeListener<Number>() {
+//            public void changed(ObservableValue<? extends Number> observableValue, Number oldGridHeight, Number newGridHeight) {
+//                System.out.println("Height: " + newGridHeight);
+//            }
+//        });
+        
         // We want to handle as well drag and drop events to add automatically new tracks
         tracksList.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
@@ -217,6 +237,8 @@ public class DirectoryController implements Initializable {
             }
         });
 
+        manjariFont = Font.loadFont(getClass().getResource("Manjari-Bold.ttf").toExternalForm(), 16.0);
+        
         try {
             initializeConnexion();
         } catch (Exception e) {
@@ -417,7 +439,8 @@ public class DirectoryController implements Initializable {
     private void populateGenres(ArrayList<Genre> cGenres) {
         genresGrid.getChildren().removeAll(genresButtons);
         genresButtons.removeAll(genresButtons);
-        double buttonHeight = Math.floor(genresGrid.getPrefHeight() / Math.ceil(cGenres.size() / NB_COLUMNS));
+        double buttonHeight = Math.floor(tracksList.getPrefHeight()/ Math.ceil(cGenres.size() / NB_COLUMNS));
+        // System.out.println(buttonHeight);
         double buttonWidth = Math.floor(genresGrid.getPrefWidth() / NB_COLUMNS);
         // System.out.println("taille boutton: " + buttonHeight);
         for (int i = 0; i < cGenres.size(); i++) {
@@ -426,6 +449,7 @@ public class DirectoryController implements Initializable {
             nButton.setPrefWidth(buttonWidth);
             nButton.setPrefHeight(buttonHeight);
             nButton.setMaxHeight(BUTTON_MAX_HEIGHT);
+            nButton.setStyle("-fx-font: 14px 'Manjari'");
             nButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
@@ -447,6 +471,7 @@ public class DirectoryController implements Initializable {
         nButton.setMinWidth(buttonWidth);
         nButton.setPrefHeight(buttonHeight);
         nButton.setMaxHeight(BUTTON_MAX_HEIGHT);
+        nButton.setStyle("-fx-font: 14px 'Manjari'");
         nButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {

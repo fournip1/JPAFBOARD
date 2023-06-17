@@ -12,11 +12,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 http://fxexperience.com/2011/12/styling-fx-buttons-with-css/
 */
 
-/*I use an external Google font*/
-@font-face {
-    font-family: Manjari;
-    src: url('./Manjari-Bold.ttf');
-}
+/*I use an external Google font
+the following lines did not work so I loaded the font inside the controller instead.
+*/
+/*@font-face {
+    src: url("Manjari-Bold.ttf");
+}*/
 
 .root {
     -fx-background-color:
@@ -69,13 +70,29 @@ http://fxexperience.com/2011/12/styling-fx-buttons-with-css/
     -fx-text-fill: black;
 }
 
+
+/*****************************
+  Setting the library controls
+******************************/
+
+.button {
+    -fx-background-color:
+        #666666,
+        linear-gradient(#666666 0%, #cccccc 100%),
+        linear-gradient(from 0% 0% to 15% 40%, rgba(255,255,255,0.9), rgba(255,255,255,0));    
+    -fx-text-fill: black; /* this setting is applied as well to the music player buttons */
+    -fx-border-color: grey;
+    -fx-border-radius: 5;
+}
+
+
 #directoryLabel {
     -fx-text-alignment: right;
 }
 
 
 /***************************
-  Setting the media buttons
+  Setting the music player
 ****************************/
 
 #playpauseButton, #stopButton {
@@ -119,6 +136,60 @@ Setting the keywords buttons
         linear-gradient(from 0% 0% to 15% 40%, rgba(255,255,255,0.9), rgba(255,255,255,0));
     -fx-background-radius: 10%;
     -fx-background-insets: 0,2,2;
-    -fx-font: 16px 'Manjari';
+/*        there was clearly a bug with the fontload executed in the css so the manjari font is actually loaded 
+        inside the controller. Sorry about this lack of coherence but I could not make it work otherwise.*/    
     -fx-text-fill: white;
     }
+    
+/**********************
+Setting the tracks list
+***********************/
+    
+.list-view {
+    -fx-background-color: transparent;
+}
+
+.list-view .list-cell:odd {
+    -fx-background-color: #f0f0ff;
+}
+
+.list-view .list-cell:even {
+    -fx-background-color: #e0e0ff;
+}
+
+.list-view .list-cell {
+    -fx-background-radius: 0;
+}
+
+
+.list-view .list-cell:selected:odd,
+.list-view .list-cell:selected:even {
+    -fx-background-color: -fx-background;
+}
+
+/******************************
+Setting the track edition table
+*******************************/
+
+.table-view {
+    -fx-background-color: #888888;
+}
+
+
+.table-view .column-header-background .label {
+    -fx-background-color: #888888;
+    -fx-background-radius: 0;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #f0f0ff;
+}
+
+.table-row-cell:even {
+    -fx-background-color: #e0e0ff;
+}
+
+.table-row-cell:selected:odd,
+.table-row-cell:selected:even {
+    -fx-background-color: -fx-background;
+}
