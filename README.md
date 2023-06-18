@@ -152,7 +152,9 @@ As well, it was complex to debug the project since it runs javafx instead of jav
 
 I followed this [explanation on stack exchange](https://stackoverflow.com/questions/56197372/i-cant-debug-an-application-using-netbeans-11-with-javafx-12/56207033#56207033).
 
-I found a bug with the loadfont instruction inside my css. I solved it by directly loading the font from the controller, which is not very coherent with the MVC coding method...
+I found a bug with the loadfont instruction inside my css. I solved it by directly loading the font from the controller, which is not very coherent with the MVC coding method.
+
+There was also a bug with wix v4, the tool which is used to make the Windows msi package with jpackage. When I initiallly ran the jpackage command, it was looking for light.exe and candle.exe binaries, which are no longer part of wix V4. Therefore, I had to downgrade to wix v3.
 
 ### Next steps
 
