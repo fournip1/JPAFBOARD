@@ -57,7 +57,7 @@ public class Genre {
                 .map(t -> t.getTrack())
                 .collect(toCollection(ArrayList::new));
         aTracks.forEach((t) -> {
-            t.setGenresString();
+            t.setGenresAndKeywordsString();
         });
         return aTracks;
     }

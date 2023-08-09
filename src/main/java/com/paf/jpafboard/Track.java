@@ -7,6 +7,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.ForeignCollectionField;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Objects;
 import static java.util.stream.Collectors.toCollection;
@@ -42,6 +43,9 @@ public class Track {
     private ForeignCollection<TrackGenre> trackgenres;
     
     private String genresString;
+    
+    private String keywordString;
+    
 
     Track() {
         // all persisted classes must define a no-arg constructor with at least package visibility
@@ -94,18 +98,14 @@ public class Track {
                 .map(t -> t.getGenre())
                 .collect(toCollection(ArrayList::new));
     }
+    
 
-    public String getKeyWordString() {
-        StringBuilder str = new StringBuilder(" " + artist + " " + title);
-        getArrayGenres().forEach((g) -> {
-            str.append(" ");
-            str.append(g.getLabel());
-        });
-        return str.toString();
+    public String getKeywordString() {        
+        return keywordString;
     }
 
-    public void setGenresString() {
-        String tempStr;
+    public void setGenresAndKeywordsString() {
+        String genresStr;
         StringBuilder str = new StringBuilder();
         if (!getArrayGenres().isEmpty()) {
             getArrayGenres().forEach((g) -> {
@@ -114,12 +114,19 @@ public class Track {
             });
             str.deleteCharAt(str.length() - 2);
         }
-        tempStr = str.toString();
-        if (!tempStr.equals("")) {
-            this.genresString = tempStr.substring(0,tempStr.length()-1);
+        genresStr = str.toString();
+        if (!genresStr.equals("")) {
+            this.genresString = genresStr.substring(0,genresStr.length()-1);
         } else {
-            this.genresString = tempStr;
+            this.genresString = genresStr;
         }
+        
+        StringBuilder keywordStr = new StringBuilder(" " + artist + " " + title);
+        getArrayGenres().forEach((g) -> {
+            keywordStr.append(" ");
+            keywordStr.append(g.getLabel());
+        });
+        this.keywordString = Normalizer.normalize(keywordStr.toString(),Normalizer.Form.NFKD).replaceAll("\\p{M}", "").toLowerCase().replaceAll("\\p{M}", "");
     }
     
     public String getGenresString() {

@@ -84,7 +84,7 @@ public class MusicLibrary {
                 .sorted(Comparator.comparing(Track::getTitle))
                 .collect(toCollection(ArrayList::new));
         aTracks.forEach((t) -> {
-            t.setGenresString();
+            t.setGenresAndKeywordsString();
         });
         return aTracks;
     }
@@ -95,7 +95,7 @@ public class MusicLibrary {
                 .sorted(Comparator.comparing(Track::getTitle))
                 .collect(toCollection(ArrayList::new));
         aTracks.forEach((t) -> {
-            t.setGenresString();
+            t.setGenresAndKeywordsString();
         });
         return aTracks;
     }

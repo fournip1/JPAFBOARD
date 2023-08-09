@@ -11,11 +11,8 @@ import com.j256.ormlite.support.ConnectionSource;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.Set;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -28,7 +25,6 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 /**
  * FXML Controller class
@@ -143,6 +139,7 @@ public class TrackController implements Initializable {
                     library.addGenre(newGenre);
                     track.addGenre(newGenre);
                 }
+                track.setGenresAndKeywordsString();                
                 trackDao.update(track);
                 mp3Util.setMp3Tags(dataMap);
             } else {

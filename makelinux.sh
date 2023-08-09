@@ -2,8 +2,8 @@ jpackage --input target/ \
   --name JPafBoard \
   --main-jar JPafBoard-2.1-shaded.jar \
   --main-class com.paf.jpafboard.Main \
-  --app-version 2.2 \
-  --icon logo/jpafboard.png \
+  --app-version 2.3 \
+  --icon logo/icon.png \
   --vendor "PAF Fournié" \
   --license-file LICENSE.md \
   --about-url  "https://github.com/fournip1/jpafboard" \

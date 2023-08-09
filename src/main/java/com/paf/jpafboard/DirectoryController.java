@@ -15,6 +15,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import static java.util.Comparator.comparing;
 import java.util.HashMap;
@@ -28,8 +29,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toCollection;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -112,6 +111,8 @@ public class DirectoryController implements Initializable {
     private TextField searchField;
     @FXML
     private ChoiceBox searchModeChoice;
+    @FXML
+    private Button playpauseButton;
 
     // Setting the grid objects
     private final int NB_COLUMNS = 6;
@@ -300,6 +301,7 @@ public class DirectoryController implements Initializable {
                 mediaPlayer = new MediaPlayer(media);
                 mediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
                 mediaPlayer.play();
+                playpauseButton.setText("Pause");
                 beginTimer();
             } catch (MediaException e) {
                 Alert alert = new Alert(AlertType.WARNING, "I cannot play " + ((Track) selectedTrack).getPath() + "\nPlease check the file!");
@@ -313,15 +315,18 @@ public class DirectoryController implements Initializable {
         if (mediaPlayer != null) {
             if (mediaPlayer.getStatus() == MediaPlayer.Status.READY || mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED || mediaPlayer.getStatus() == MediaPlayer.Status.STOPPED) {
                 mediaPlayer.play();
+                playpauseButton.setText("Pause");
                 beginTimer();
             } else if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
                 mediaPlayer.pause();
+                playpauseButton.setText("Play");
                 timer.cancel();
             }
         } else {
             if (media != null) {
                 mediaPlayer = new MediaPlayer(media);
                 mediaPlayer.play();
+                playpauseButton.setText("Pause");
             } else {
                 Object selectedTrack = tracksList.getSelectionModel().getSelectedItem();
                 if (selectedTrack != null) {
@@ -354,6 +359,7 @@ public class DirectoryController implements Initializable {
         if (mediaPlayer != null) {
             mediaPlayer.seek(Duration.ZERO);
             mediaPlayer.stop();
+            playpauseButton.setText("Play");
         }
     }
 
@@ -409,10 +415,11 @@ public class DirectoryController implements Initializable {
         Set<Genre> hGenres = new HashSet<>();
         String[] keyWords = searchField.getText().split(" ");
         if (searchModeChoice.getValue().equals("Or")) {
-            hTracks.removeAll(hTracks);
+            hTracks.clear();
             for (String str : keyWords) {
+                String normStr = Normalizer.normalize(str,Normalizer.Form.NFKD).replaceAll("\\p{M}", "").toLowerCase().replaceAll("\\p{M}", "");
                 aTracks.stream()
-                        .filter(t -> t.getKeyWordString().toLowerCase().contains(str.toLowerCase()))
+                        .filter(t -> t.getKeywordString().contains(normStr))
                         .forEach(hTracks::add);
             }
             fTracks = hTracks.stream()
@@ -421,8 +428,9 @@ public class DirectoryController implements Initializable {
         } else {
             fTracks = aTracks;
             for (String str : keyWords) {
+                String normStr = Normalizer.normalize(str,Normalizer.Form.NFKD).replaceAll("\\p{M}", "").toLowerCase().replaceAll("\\p{M}", "");
                 fTracks = fTracks.stream()
-                        .filter(t -> t.getKeyWordString().toLowerCase().contains(str.toLowerCase()))
+                        .filter(t -> t.getKeywordString().contains(normStr))
                         .collect(toCollection(ArrayList::new));
             }
         }
@@ -437,8 +445,8 @@ public class DirectoryController implements Initializable {
     }
 
     private void populateGenres(ArrayList<Genre> cGenres) {
-        genresGrid.getChildren().removeAll(genresButtons);
-        genresButtons.removeAll(genresButtons);
+        genresGrid.getChildren().clear();
+        genresButtons.clear();
         double buttonHeight = Math.floor(tracksList.getPrefHeight()/ Math.ceil(cGenres.size() / NB_COLUMNS));
         // System.out.println(buttonHeight);
         double buttonWidth = Math.floor(genresGrid.getPrefWidth() / NB_COLUMNS);
@@ -571,7 +579,8 @@ public class DirectoryController implements Initializable {
                     library.addGenre(newGenre);
                     newTrack.addGenre(newGenre);
                 }
-            }
+                newTrack.setGenresAndKeywordsString();
+           }
         }
     }
 
@@ -579,7 +588,7 @@ public class DirectoryController implements Initializable {
         Object selectedObject = tracksList.getSelectionModel().getSelectedItem();
         if (selectedObject != null) {
             Track selectedTrack = (Track) selectedObject;
-            selectedTrack.setGenresString();
+            selectedTrack.setGenresAndKeywordsString();
             // We now need to open a new window and pass the track information to it
             Stage editTrackStage = new Stage();
             editTrackStage.initModality(Modality.NONE);
@@ -635,7 +644,7 @@ public class DirectoryController implements Initializable {
                 return;
             }
 
-            ((Track) selectedTrack).getGenres().removeAll(((Track) selectedTrack).getGenres());
+            ((Track) selectedTrack).getGenres().clear();
             library.getTracks().remove((Track) selectedTrack);
             library.cleanGenres();
 
@@ -673,11 +682,11 @@ public class DirectoryController implements Initializable {
             //let's first record the tracks on which we should modify the tags
             modifiedTracks = selectedGenre.getArrayTracks();
             // on elimine les genres des tracks en question            
-            selectedGenre.getTracks().removeAll(selectedGenre.getTracks());
+            selectedGenre.getTracks().clear();
             library.getGenres().remove(selectedGenre);
             // Now let's modify the tags            
             for (Track t : modifiedTracks) {
-                t.setGenresString();
+                t.setGenresAndKeywordsString();            
                 dataMap.replace("Title", t.getTitle());
                 dataMap.replace("Artist", t.getArtist());
                 dataMap.replace("Genres", t.getGenresString());

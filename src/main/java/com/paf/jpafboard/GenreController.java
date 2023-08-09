@@ -87,7 +87,12 @@ public class GenreController implements Initializable {
     }
 
     public void saveGenre() throws Exception {
-        String newLabel = genreText.getText();
+        String newLabel;
+        if (!genreText.getText().trim().isEmpty())  {
+            newLabel = genreText.getText().trim().substring(0, 1).toUpperCase() + genreText.getText().trim().substring(1).toLowerCase();
+        } else {
+            newLabel =  "";
+        }
         if (!newLabel.equals(genre.getLabel())) {
             // we first select the tracks to be modified
             ArrayList<Track> mTracks = genre.getArrayTracks();
@@ -102,12 +107,12 @@ public class GenreController implements Initializable {
             // We check wether the genre already exists
             if (!genresLabels.contains(newLabel)) {
                 // then we remove the TrackGenre 
-                genre.getTracks().removeAll(genre.getTracks());
+                genre.getTracks().clear();
                 genreDao.updateId(genre, newLabel);
                 for (Track t : mTracks) {
                     // setting new data
                     t.addGenre(genre);
-                    t.setGenresString();
+                    t.setGenresAndKeywordsString();
                     dataMap.replace("Title", t.getTitle());
                     dataMap.replace("Artist", t.getArtist());
                     dataMap.replace("Genres", t.getGenresString());
@@ -128,7 +133,7 @@ public class GenreController implements Initializable {
                             return;
                         });
                 // then we remove the TrackGenre 
-                genre.getTracks().removeAll(genre.getTracks());
+                genre.getTracks().clear();
                 // we remove the genre
                 library.getGenres().remove(genre);
                 Genre keptGenre = genreDao.queryForId(newLabel);
@@ -136,7 +141,7 @@ public class GenreController implements Initializable {
                 for (Track t : mTracks) {
                     // setting new data
                     t.addGenre(keptGenre);
-                    t.setGenresString();
+                    t.setGenresAndKeywordsString();
                     dataMap.replace("Title", t.getTitle());
                     dataMap.replace("Artist", t.getArtist());
                     dataMap.replace("Genres", t.getGenresString());
