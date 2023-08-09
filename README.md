@@ -38,13 +38,13 @@ All the files needed  to run the application are in [this directory](/installers
 
 You may use a ready made installer for debian (.deb). Simply run the command:
 
-> sudo dpkg -i jpafboard_2.2_amd64.deb
+> sudo dpkg -i jpafboard_2.3_amd64.deb
 
 This will create a ***JPafBoard*** shortcut  in your applications menu.
 
 If you want to uninstall it, run:
 
-> sudo apt remove JPafBoard
+> sudo apt remove jpafboard
 
 ### For Windows 
 
