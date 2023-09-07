@@ -93,7 +93,7 @@ public class DirectoryController implements Initializable {
     private File selectedDirectory;
 
     // To manage the music player
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer, tempMediaPlayer;
     private Media media;
     private Timer timer;
     private TimerTask task;
@@ -309,13 +309,18 @@ public class DirectoryController implements Initializable {
                 media = new Media(new File(((Track) selectedTrack).getPath()).toURI().toString());
                 trackInfoLabel.setText("loaded: " + ((Track) selectedTrack).toString());
                 if (mediaPlayer != null) {
-                    mediaPlayer.stop();
-                    mediaPlayer.dispose();
-                    timer.cancel();
-                    mediaPlayer = null;
+                    // we fading is selected
+                    if (fadingCheckBox.isSelected() && (mediaPlayer.getTotalDuration().toMillis() - mediaPlayer.getCurrentTime().toMillis()) > FADING_DURATION) {
+                        tempMediaPlayer = mediaPlayer;
+                        stopTempMedia();
+                    } else {
+                        mediaPlayer.stop();
+                        mediaPlayer.dispose();
+                        timer.cancel();
+                        mediaPlayer = null;
+                    }
                 }
                 mediaPlayer = new MediaPlayer(media);
-                mediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
                 // Is the repeat CheckBox selected?
                 if (loopCheckBox.isSelected()) {
                     // mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
@@ -331,6 +336,18 @@ public class DirectoryController implements Initializable {
                 playpauseButton.setText("Pause");
                 beginTimer();
                 mediaPlayer.play();
+
+                // if fading is selected we have the volume faading in
+                if (fadingCheckBox.isSelected()) {
+                    // System.out.println("Fading in!");
+                    mediaPlayer.setVolume(0);
+                    Timeline timeline = new Timeline(
+                            new KeyFrame(Duration.millis(FADING_DURATION),
+                                    new KeyValue(mediaPlayer.volumeProperty(), volumeSlider.getValue() * 0.01)));
+                    timeline.play();
+                } else {
+                    mediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
+                }
             } catch (MediaException e) {
                 Alert alert = new Alert(AlertType.WARNING, "I cannot play " + ((Track) selectedTrack).getPath() + "\nPlease check the file!");
                 alert.show();
@@ -399,12 +416,28 @@ public class DirectoryController implements Initializable {
 
     }
 
+    public void stopTempMedia() {
+        // System.out.println("Fading out now!");
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.millis(FADING_DURATION),
+                        new KeyValue(tempMediaPlayer.volumeProperty(), 0)));
+        timeline.setOnFinished(eh
+                -> {
+            if (tempMediaPlayer != null) {
+                tempMediaPlayer.stop();
+                tempMediaPlayer.dispose();
+                tempMediaPlayer = null;
+            }
+        });
+        timeline.play();
+    }
+
     public void stopMedia() {
         songProgressBar.setProgress(0);
         if (mediaPlayer != null) {
             // we fade out if the option is selected
-            if (fadingCheckBox.isSelected() && (mediaPlayer.getTotalDuration().toMillis()- mediaPlayer.getCurrentTime().toMillis())> FADING_DURATION) {
-                System.out.println("Fading out now!");
+            if (fadingCheckBox.isSelected() && (mediaPlayer.getTotalDuration().toMillis() - mediaPlayer.getCurrentTime().toMillis()) > FADING_DURATION) {
+                // System.out.println("Fading out now!");
                 Timeline timeline = new Timeline(
                         new KeyFrame(Duration.millis(FADING_DURATION),
                                 new KeyValue(mediaPlayer.volumeProperty(), 0)));
