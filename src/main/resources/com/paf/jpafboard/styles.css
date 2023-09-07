@@ -39,12 +39,12 @@ the following lines did not work so I loaded the font inside the controller inst
 }
 
 
-.button, .label {
+.button, .label, .check-box {
     -fx-font-weight: bold;
 }
 
 
-.button {
+/*.button {
     -fx-background-color:
         #666666,
         linear-gradient(#666666 0%, #cccccc 100%),
@@ -52,10 +52,14 @@ the following lines did not work so I loaded the font inside the controller inst
     -fx-text-fill: black;
     -fx-border-color: grey;
     -fx-border-radius: 5;
+}*/
+
+.label  {
+    -fx-text-fill: #cdcce0;
 }
 
-.label {
-    -fx-text-fill: #cdcce0;
+.check-box {
+    -fx-text-fill: white;
 }
 
 .text-field, .choice-box {

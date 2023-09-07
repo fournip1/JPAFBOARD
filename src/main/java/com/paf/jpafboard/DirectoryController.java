@@ -2,6 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
+// checkbox pour repeat
+// fade out
+// barre de progression plus large
 package com.paf.jpafboard;
 
 import com.j256.ormlite.dao.Dao;
@@ -29,6 +32,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toCollection;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -39,6 +45,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
@@ -68,6 +75,9 @@ import javafx.util.Duration;
  * @author lemerle
  */
 public class DirectoryController implements Initializable {
+
+    // fading duration in milliseconds
+    public final static int FADING_DURATION = 3000;
 
     // Most important declaration
     private MusicLibrary library;
@@ -113,13 +123,14 @@ public class DirectoryController implements Initializable {
     private ChoiceBox searchModeChoice;
     @FXML
     private Button playpauseButton;
+    @FXML
+    private CheckBox loopCheckBox, fadingCheckBox;
 
     // Setting the grid objects
     private final int NB_COLUMNS = 6;
     private final double BUTTON_MAX_HEIGHT = 40;
     private Font manjariFont;
-    
-    
+
     private ArrayList<Button> genresButtons = new ArrayList<>();
 
     private final ContextMenu trackContextMenu = new ContextMenu();
@@ -160,7 +171,6 @@ public class DirectoryController implements Initializable {
 //                System.out.println("Height: " + newGridHeight);
 //            }
 //        });
-        
         // We want to handle as well drag and drop events to add automatically new tracks
         tracksList.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
@@ -198,6 +208,12 @@ public class DirectoryController implements Initializable {
         searchModeChoice.valueProperty().addListener(
                 (o) -> {
                     searchKeyWords();
+                });
+
+        // we set a listener as well for the loopCheckBox
+        loopCheckBox.selectedProperty().addListener(
+                (o) -> {
+                    setRepeatMode();
                 });
 
         // setting the context menu
@@ -239,7 +255,7 @@ public class DirectoryController implements Initializable {
         });
 
         manjariFont = Font.loadFont(getClass().getResource("Manjari-Bold.ttf").toExternalForm(), 16.0);
-        
+
         try {
             initializeConnexion();
         } catch (Exception e) {
@@ -300,9 +316,21 @@ public class DirectoryController implements Initializable {
                 }
                 mediaPlayer = new MediaPlayer(media);
                 mediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
-                mediaPlayer.play();
+                // Is the repeat CheckBox selected?
+                if (loopCheckBox.isSelected()) {
+                    // mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+                    mediaPlayer.setOnEndOfMedia(() -> {
+                        mediaPlayer.seek(Duration.ZERO);
+                        mediaPlayer.play();
+                    });
+                } else {
+                    mediaPlayer.setOnEndOfMedia(() -> {
+                        stopMedia();
+                    });
+                }
                 playpauseButton.setText("Pause");
                 beginTimer();
+                mediaPlayer.play();
             } catch (MediaException e) {
                 Alert alert = new Alert(AlertType.WARNING, "I cannot play " + ((Track) selectedTrack).getPath() + "\nPlease check the file!");
                 alert.show();
@@ -311,9 +339,26 @@ public class DirectoryController implements Initializable {
         }
     }
 
+    public void setRepeatMode() {
+        if (mediaPlayer != null) {
+            if (loopCheckBox.isSelected()) {
+                // mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+                mediaPlayer.setOnEndOfMedia(() -> {
+                    mediaPlayer.seek(Duration.ZERO);
+                    mediaPlayer.play();
+                });
+            } else {
+                mediaPlayer.setOnEndOfMedia(() -> {
+                    stopMedia();
+                });
+            }
+        }
+    }
+
     public void playpauseMedia() {
         if (mediaPlayer != null) {
             if (mediaPlayer.getStatus() == MediaPlayer.Status.READY || mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED || mediaPlayer.getStatus() == MediaPlayer.Status.STOPPED) {
+                mediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
                 mediaPlayer.play();
                 playpauseButton.setText("Pause");
                 beginTimer();
@@ -357,9 +402,24 @@ public class DirectoryController implements Initializable {
     public void stopMedia() {
         songProgressBar.setProgress(0);
         if (mediaPlayer != null) {
-            mediaPlayer.seek(Duration.ZERO);
-            mediaPlayer.stop();
-            playpauseButton.setText("Play");
+            // we fade out if the option is selected
+            if (fadingCheckBox.isSelected() && (mediaPlayer.getTotalDuration().toMillis()- mediaPlayer.getCurrentTime().toMillis())> FADING_DURATION) {
+                System.out.println("Fading out now!");
+                Timeline timeline = new Timeline(
+                        new KeyFrame(Duration.millis(FADING_DURATION),
+                                new KeyValue(mediaPlayer.volumeProperty(), 0)));
+                timeline.setOnFinished(eh
+                        -> {
+                    mediaPlayer.seek(Duration.ZERO);
+                    mediaPlayer.stop();
+                    playpauseButton.setText("Play");
+                });
+                timeline.play();
+            } else {
+                mediaPlayer.seek(Duration.ZERO);
+                mediaPlayer.stop();
+                playpauseButton.setText("Play");
+            }
         }
     }
 
@@ -376,7 +436,7 @@ public class DirectoryController implements Initializable {
             public void run() {
                 double current = mediaPlayer.getCurrentTime().toSeconds();
                 songProgressBar.setProgress(mediaPlayer.getCurrentTime().toSeconds() / mediaPlayer.getTotalDuration().toSeconds());
-                if (current >= mediaPlayer.getTotalDuration().toSeconds()) {
+                if (current >= mediaPlayer.getTotalDuration().toSeconds() && !loopCheckBox.isSelected()) {
                     stopMedia();
                 }
             }
@@ -417,7 +477,7 @@ public class DirectoryController implements Initializable {
         if (searchModeChoice.getValue().equals("Or")) {
             hTracks.clear();
             for (String str : keyWords) {
-                String normStr = Normalizer.normalize(str,Normalizer.Form.NFKD).replaceAll("\\p{M}", "").toLowerCase().replaceAll("\\p{M}", "");
+                String normStr = Normalizer.normalize(str, Normalizer.Form.NFKD).replaceAll("\\p{M}", "").toLowerCase().replaceAll("\\p{M}", "");
                 aTracks.stream()
                         .filter(t -> t.getKeywordString().contains(normStr))
                         .forEach(hTracks::add);
@@ -428,7 +488,7 @@ public class DirectoryController implements Initializable {
         } else {
             fTracks = aTracks;
             for (String str : keyWords) {
-                String normStr = Normalizer.normalize(str,Normalizer.Form.NFKD).replaceAll("\\p{M}", "").toLowerCase().replaceAll("\\p{M}", "");
+                String normStr = Normalizer.normalize(str, Normalizer.Form.NFKD).replaceAll("\\p{M}", "").toLowerCase().replaceAll("\\p{M}", "");
                 fTracks = fTracks.stream()
                         .filter(t -> t.getKeywordString().contains(normStr))
                         .collect(toCollection(ArrayList::new));
@@ -447,7 +507,7 @@ public class DirectoryController implements Initializable {
     private void populateGenres(ArrayList<Genre> cGenres) {
         genresGrid.getChildren().clear();
         genresButtons.clear();
-        double buttonHeight = Math.floor(tracksList.getPrefHeight()/ Math.ceil(cGenres.size() / NB_COLUMNS));
+        double buttonHeight = Math.floor(tracksList.getPrefHeight() / Math.ceil(cGenres.size() / NB_COLUMNS));
         // System.out.println(buttonHeight);
         double buttonWidth = Math.floor(genresGrid.getPrefWidth() / NB_COLUMNS);
         // System.out.println("taille boutton: " + buttonHeight);
@@ -580,7 +640,7 @@ public class DirectoryController implements Initializable {
                     newTrack.addGenre(newGenre);
                 }
                 newTrack.setGenresAndKeywordsString();
-           }
+            }
         }
     }
 
@@ -686,7 +746,7 @@ public class DirectoryController implements Initializable {
             library.getGenres().remove(selectedGenre);
             // Now let's modify the tags            
             for (Track t : modifiedTracks) {
-                t.setGenresAndKeywordsString();            
+                t.setGenresAndKeywordsString();
                 dataMap.replace("Title", t.getTitle());
                 dataMap.replace("Artist", t.getArtist());
                 dataMap.replace("Genres", t.getGenresString());
