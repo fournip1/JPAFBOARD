@@ -32,9 +32,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toCollection;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -60,14 +58,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -75,9 +70,6 @@ import javafx.util.Duration;
  * @author lemerle
  */
 public class DirectoryController implements Initializable {
-
-    // fading duration in milliseconds
-    public final static int FADING_DURATION = 3000;
 
     // Most important declaration
     private MusicLibrary library;
@@ -93,8 +85,7 @@ public class DirectoryController implements Initializable {
     private File selectedDirectory;
 
     // To manage the music player
-    private MediaPlayer mediaPlayer, tempMediaPlayer;
-    private Media media;
+    private PAFMediaPlayer pAFMediaPlayer;
     private Timer timer;
     private TimerTask task;
 
@@ -112,7 +103,7 @@ public class DirectoryController implements Initializable {
     @FXML
     private GridPane genresGrid;
     @FXML
-    private Label directoryLabel, trackInfoLabel;
+    private Label directoryLabel, currentTrackInfoLabel, previousTrackInfoLabel, nextTrackInfoLabel;
     @FXML
     private Slider volumeSlider, timeSlider;
     @FXML
@@ -137,8 +128,9 @@ public class DirectoryController implements Initializable {
     private final ContextMenu genreContextMenu = new ContextMenu();
 
     private final MenuItem menuEditTrack = new MenuItem("Edit");
-    private final MenuItem menuEditGenre = new MenuItem("Edit");
     private final MenuItem menuRemoveTrack = new MenuItem("Remove");
+    private final MenuItem menuAddToQueue = new MenuItem("Add to queue");
+    private final MenuItem menuEditGenre = new MenuItem("Edit");
     private final MenuItem menuRemoveGenre = new MenuItem("Remove");
 
     /**
@@ -191,7 +183,6 @@ public class DirectoryController implements Initializable {
             public void handle(final DragEvent event) {
                 tracksList.getStyleClass().clear();
                 tracksList.setStyle(null);
-                // tracksList.getStyleClass().add("list-view");
             }
         });
 
@@ -205,6 +196,12 @@ public class DirectoryController implements Initializable {
                 (o) -> {
                     setVolume();
                 });
+        
+        timeSlider.valueProperty().addListener(
+                (o) -> {
+                    seekTime();
+                });
+        
         searchModeChoice.valueProperty().addListener(
                 (o) -> {
                     searchKeyWords();
@@ -213,11 +210,16 @@ public class DirectoryController implements Initializable {
         // we set a listener as well for the loopCheckBox
         loopCheckBox.selectedProperty().addListener(
                 (o) -> {
-                    setRepeatMode();
+                    setLooping();
+                });
+
+        fadingCheckBox.selectedProperty().addListener(
+                (o) -> {
+                    setFading();
                 });
 
         // setting the context menu
-        trackContextMenu.getItems().addAll(menuEditTrack, menuRemoveTrack);
+        trackContextMenu.getItems().addAll(menuEditTrack, menuRemoveTrack, menuAddToQueue);
         genreContextMenu.getItems().addAll(menuEditGenre, menuRemoveGenre);
 
         tracksList.setContextMenu(trackContextMenu);
@@ -235,6 +237,14 @@ public class DirectoryController implements Initializable {
                 editTrack();
             } catch (Exception t) {
                 t.printStackTrace();
+            }
+        });
+
+        menuAddToQueue.setOnAction((a) -> {
+            try {
+                setNextSong();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
@@ -300,159 +310,103 @@ public class DirectoryController implements Initializable {
     private void playMedia() {
         Object selectedTrack = tracksList.getSelectionModel().getSelectedItem();
         if (selectedTrack != null) {
-            if (!Files.isRegularFile(Path.of(((Track) selectedTrack).getPath()))) {
-                Alert alert = new Alert(AlertType.WARNING, ((Track) selectedTrack).getPath() + " has been removed.");
-                alert.show();
-                return;
+            Track currentSong = ((Track) selectedTrack);
+            if (pAFMediaPlayer != null) {
+                pAFMediaPlayer.setCurrentSong(currentSong, true);
+                previousTrackInfoLabel.setText("previous: " + pAFMediaPlayer.getPreviousSong().toString());
+            } else {
+                pAFMediaPlayer = new PAFMediaPlayer(currentSong, fadingCheckBox.isSelected(), loopCheckBox.isSelected(), volumeSlider.getValue() * 0.01);
             }
-            try {
-                media = new Media(new File(((Track) selectedTrack).getPath()).toURI().toString());
-                trackInfoLabel.setText("loaded: " + ((Track) selectedTrack).toString());
-                if (mediaPlayer != null) {
-                    // we fading is selected
-                    if (fadingCheckBox.isSelected() && (mediaPlayer.getTotalDuration().toMillis() - mediaPlayer.getCurrentTime().toMillis()) > FADING_DURATION) {
-                        tempMediaPlayer = mediaPlayer;
-                        stopTempMedia();
-                    } else {
-                        mediaPlayer.stop();
-                        mediaPlayer.dispose();
-                        timer.cancel();
-                        mediaPlayer = null;
-                    }
-                }
-                mediaPlayer = new MediaPlayer(media);
-                // Is the repeat CheckBox selected?
-                if (loopCheckBox.isSelected()) {
-                    // mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-                    mediaPlayer.setOnEndOfMedia(() -> {
-                        mediaPlayer.seek(Duration.ZERO);
-                        mediaPlayer.play();
-                    });
-                } else {
-                    mediaPlayer.setOnEndOfMedia(() -> {
-                        stopMedia();
-                    });
-                }
-                playpauseButton.setText("Pause");
-                beginTimer();
-                mediaPlayer.play();
-
-                // if fading is selected we have the volume faading in
-                if (fadingCheckBox.isSelected()) {
-                    // System.out.println("Fading in!");
-                    mediaPlayer.setVolume(0);
-                    Timeline timeline = new Timeline(
-                            new KeyFrame(Duration.millis(FADING_DURATION),
-                                    new KeyValue(mediaPlayer.volumeProperty(), volumeSlider.getValue() * 0.01)));
-                    timeline.play();
-                } else {
-                    mediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
-                }
-            } catch (MediaException e) {
-                Alert alert = new Alert(AlertType.WARNING, "I cannot play " + ((Track) selectedTrack).getPath() + "\nPlease check the file!");
-                alert.show();
-                e.printStackTrace();
-            }
+            currentTrackInfoLabel.setText("current: " + currentSong.toString());
+            playpauseButton.setStyle("-fx-background-image: url('pause_alpha.png');");
+            beginTimer();
         }
     }
 
-    public void setRepeatMode() {
-        if (mediaPlayer != null) {
-            if (loopCheckBox.isSelected()) {
-                // mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-                mediaPlayer.setOnEndOfMedia(() -> {
-                    mediaPlayer.seek(Duration.ZERO);
-                    mediaPlayer.play();
-                });
-            } else {
-                mediaPlayer.setOnEndOfMedia(() -> {
-                    stopMedia();
-                });
-            }
+    private void setLooping() {
+        if (pAFMediaPlayer != null) {
+            pAFMediaPlayer.setLooping(loopCheckBox.isSelected());
+        }
+    }
+
+    private void setFading() {
+        if (pAFMediaPlayer != null) {
+            pAFMediaPlayer.setFading(fadingCheckBox.isSelected());
         }
     }
 
     public void playpauseMedia() {
-        if (mediaPlayer != null) {
-            if (mediaPlayer.getStatus() == MediaPlayer.Status.READY || mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED || mediaPlayer.getStatus() == MediaPlayer.Status.STOPPED) {
-                mediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
-                mediaPlayer.play();
-                playpauseButton.setText("Pause");
+        if (pAFMediaPlayer != null) {
+            if (pAFMediaPlayer.getStatus() == MediaPlayer.Status.READY || pAFMediaPlayer.getStatus() == MediaPlayer.Status.PAUSED || pAFMediaPlayer.getStatus() == MediaPlayer.Status.STOPPED) {
+                pAFMediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
+                pAFMediaPlayer.play();
+                playpauseButton.setStyle("-fx-background-image: url('pause_alpha.png');");
                 beginTimer();
-            } else if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
-                mediaPlayer.pause();
-                playpauseButton.setText("Play");
-                timer.cancel();
+            } else if (pAFMediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+                pAFMediaPlayer.pause();
+                playpauseButton.setStyle("-fx-background-image: url('play_alpha.png');");
             }
         } else {
-            if (media != null) {
-                mediaPlayer = new MediaPlayer(media);
-                mediaPlayer.play();
-                playpauseButton.setText("Pause");
-            } else {
-                Object selectedTrack = tracksList.getSelectionModel().getSelectedItem();
-                if (selectedTrack != null) {
-                    playMedia();
-                } else {
-                    tracksList.getSelectionModel().selectFirst();
-                    playMedia();
-                }
+            Object selectedTrack = tracksList.getSelectionModel().getSelectedItem();
+            if (selectedTrack == null) {
+                tracksList.getSelectionModel().selectFirst();                
             }
+            playMedia();
+        }
+    }
 
+    public void previousMedia() {
+        if (pAFMediaPlayer != null) {
+            pAFMediaPlayer.playPrevious();
+            currentTrackInfoLabel.setText("current: " + pAFMediaPlayer.getCurrentSong().toString());
+            if (pAFMediaPlayer.getPreviousSong() == null) {
+                previousTrackInfoLabel.setText("");
+            } else {
+                previousTrackInfoLabel.setText("previous: " + pAFMediaPlayer.getPreviousSong().toString());
+            }
+        }
+
+    }
+
+    public void nextMedia() {
+        if (pAFMediaPlayer != null && pAFMediaPlayer.getNextSong()!=null) {
+            pAFMediaPlayer.playNext();
+            currentTrackInfoLabel.setText("current: " + pAFMediaPlayer.getCurrentSong().toString());
+            if (pAFMediaPlayer.getPreviousSong() == null) {
+                previousTrackInfoLabel.setText("");
+            } else {
+                previousTrackInfoLabel.setText("previous: " + pAFMediaPlayer.getPreviousSong().toString());
+            }
+            nextTrackInfoLabel.setText("");
+        }
+    }
+
+    private void setNextSong() {
+        Object selectedObject = tracksList.getSelectionModel().getSelectedItem();
+        if (selectedObject != null && pAFMediaPlayer != null) {
+            Track selectedTrack = (Track) selectedObject;
+            pAFMediaPlayer.setNextSong(selectedTrack);
+            nextTrackInfoLabel.setText("next: " + selectedTrack.toString());
         }
     }
 
     private void setVolume() {
-        if (mediaPlayer != null) {
-            mediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
+        if (pAFMediaPlayer != null) {
+            pAFMediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
         }
     }
 
     public void seekTime() {
         songProgressBar.setProgress(timeSlider.getValue() * 0.01);
-        if (mediaPlayer != null) {
-            mediaPlayer.seek(Duration.millis(timeSlider.getValue() * mediaPlayer.getTotalDuration().toMillis() * 0.01));
+        if (pAFMediaPlayer != null) {
+            pAFMediaPlayer.setTime(timeSlider.getValue() * 0.01);
         }
-
-    }
-
-    public void stopTempMedia() {
-        // System.out.println("Fading out now!");
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.millis(FADING_DURATION),
-                        new KeyValue(tempMediaPlayer.volumeProperty(), 0)));
-        timeline.setOnFinished(eh
-                -> {
-            if (tempMediaPlayer != null) {
-                tempMediaPlayer.stop();
-                tempMediaPlayer.dispose();
-                tempMediaPlayer = null;
-            }
-        });
-        timeline.play();
     }
 
     public void stopMedia() {
-        songProgressBar.setProgress(0);
-        if (mediaPlayer != null) {
-            // we fade out if the option is selected
-            if (fadingCheckBox.isSelected() && (mediaPlayer.getTotalDuration().toMillis() - mediaPlayer.getCurrentTime().toMillis()) > FADING_DURATION) {
-                // System.out.println("Fading out now!");
-                Timeline timeline = new Timeline(
-                        new KeyFrame(Duration.millis(FADING_DURATION),
-                                new KeyValue(mediaPlayer.volumeProperty(), 0)));
-                timeline.setOnFinished(eh
-                        -> {
-                    mediaPlayer.seek(Duration.ZERO);
-                    mediaPlayer.stop();
-                    playpauseButton.setText("Play");
-                });
-                timeline.play();
-            } else {
-                mediaPlayer.seek(Duration.ZERO);
-                mediaPlayer.stop();
-                playpauseButton.setText("Play");
-            }
+        if (pAFMediaPlayer != null) {
+            pAFMediaPlayer.stop();
+            playpauseButton.setStyle("-fx-background-image: url('play_alpha.png');");
         }
     }
 
@@ -467,10 +421,11 @@ public class DirectoryController implements Initializable {
         task = new TimerTask() {
             @Override
             public void run() {
-                double current = mediaPlayer.getCurrentTime().toSeconds();
-                songProgressBar.setProgress(mediaPlayer.getCurrentTime().toSeconds() / mediaPlayer.getTotalDuration().toSeconds());
-                if (current >= mediaPlayer.getTotalDuration().toSeconds() && !loopCheckBox.isSelected()) {
-                    stopMedia();
+                double current = pAFMediaPlayer.getCurrentTime();
+                songProgressBar.setProgress(pAFMediaPlayer.getCurrentTime() / pAFMediaPlayer.getTotalDuration());
+                if (pAFMediaPlayer.getStatus() == MediaPlayer.Status.STOPPED) {
+                    // Platform.runLater(() -> playpauseButton.setText("Play"));
+                    Platform.runLater(() -> playpauseButton.setStyle("-fx-background-image: url('play_alpha.png');"));
                 }
             }
         };
@@ -846,5 +801,4 @@ public class DirectoryController implements Initializable {
             e.consume();
         }
     }
-
 }

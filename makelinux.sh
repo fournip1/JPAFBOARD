@@ -1,8 +1,8 @@
 jpackage --input target/ \
   --name JPafBoard \
-  --main-jar JPafBoard-2.4-shaded.jar \
+  --main-jar JPafBoard-2.5-shaded.jar \
   --main-class com.paf.jpafboard.Main \
-  --app-version 2.4 \
+  --app-version 2.5 \
   --icon logo/icon.png \
   --vendor "PAF Fournié" \
   --license-file LICENSE.md \

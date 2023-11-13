@@ -44,6 +44,14 @@ the following lines did not work so I loaded the font inside the controller inst
 }
 
 
+/*****************************
+  Only for next and prev
+******************************/
+
+#nextTrackInfoLabel, #previousTrackInfoLabel {
+    -fx-font-weight: normal;
+}
+
 /*.button {
     -fx-background-color:
         #666666,
@@ -99,14 +107,35 @@ the following lines did not work so I loaded the font inside the controller inst
   Setting the music player
 ****************************/
 
-#playpauseButton, #stopButton {
+#playpauseButton { 
+    -fx-background-image: url('play_alpha.png');
+}
+
+#stopButton { 
+    -fx-background-image: url('stop_alpha.png');    
+}
+
+#nextButton { 
+    -fx-background-image: url('next_alpha.png');    
+}
+
+
+#prevButton { 
+    -fx-background-image: url('previous_alpha.png');   
+}
+
+#playpauseButton, #stopButton, #prevButton, #nextButton {
     -fx-background-color:
         #000066,
         linear-gradient(#0099ff 0%, #00ccff 100%),
         linear-gradient(from 0% 0% to 15% 40%, rgba(255,255,255,0.9), rgba(255,255,255,0));
     -fx-background-radius: 10%;
-    -fx-background-insets: 0,2,2;    
+    -fx-background-insets: 0,2,2;
+    -fx-background-size: 30px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
 }
+
 
 #songProgressBar {
     -fx-accent: #0099ff;
