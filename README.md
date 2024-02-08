@@ -32,13 +32,13 @@ The board allows the user to:
 
 ## Download and install
 
-All the files needed  to run the application are in [this directory](/installers).
+All the files and instructions needed  to run the application are [on my server](https://dalida.hopto.org/jpafboard_installers/).
 
 ### For Debian-based distributions (ubuntu, mint, raspbian...)
 
 You may use a ready made installer for debian (.deb). Simply run the command:
 
-> sudo dpkg -i jpafboard_2.3_amd64.deb
+> sudo dpkg -i jpafboard_2.5_amd64.deb
 
 This will create a ***JPafBoard*** shortcut  in your applications menu.
 
